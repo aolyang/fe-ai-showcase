@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="sharp-mono">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>pm-coach 工作流 · 技术分享</title>
+<link rel="stylesheet" href="../.claude/skills/html-ppt/assets/fonts.css">
+<link rel="stylesheet" href="../.claude/skills/html-ppt/assets/base.css">
+<link rel="stylesheet" id="theme-link" href="../.claude/skills/html-ppt/assets/themes/sharp-mono.css">
+<link rel="stylesheet" href="../.claude/skills/html-ppt/assets/animations/animations.css">
+<style>
+  /* ===== sharp-mono deck tuning (与 index.html 一致) ===== */
+  .kicker{color:var(--accent-3)}
+  .accent{color:var(--accent-3);font-weight:800}
+  .pill{background:#000;color:#fff;border:2px solid #000;border-radius:0}
+  .pill-accent{background:var(--accent-3);color:#fff;border:2px solid var(--accent-3)}
+  .codeblock{background:#000;color:#fff;border:2px solid #000;box-shadow:4px 4px 0 #000;
+    padding:18px 20px;font-size:13.5px;line-height:1.75;overflow:auto;border-radius:0;margin:0;
+    font-family:var(--font-mono)}
+  .codeblock .c{color:#7a7a7a}
+  .codeblock .k{color:#ff5c5c}
+  .codeblock .v{color:#ffd866}
+  .bigquote{font-family:var(--font-display);font-weight:800;line-height:1.2;
+    letter-spacing:var(--letter-tight);text-transform:uppercase}
+  /* steps */
+  .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:40px}
+  .step{position:relative;padding:30px 24px 22px;border:2px solid #000;background:var(--surface);
+    box-shadow:5px 5px 0 #000}
+  .step .num{position:absolute;top:-22px;left:20px;width:46px;height:46px;border-radius:50%;
+    background:#000;color:#fff;display:flex;align-items:center;justify-content:center;
+    font-weight:800;font-size:18px;border:2px solid #000;box-shadow:3px 3px 0 var(--accent-3)}
+  .step h4{margin:14px 0 8px;font-size:18px;text-transform:uppercase;letter-spacing:.02em}
+  .step .cmd{font-family:var(--font-mono);font-size:13px;color:var(--accent-3);display:block;margin-bottom:6px}
+  .step p{font-size:13.5px;color:var(--text-2);line-height:1.6;margin:0}
+  /* table */
+  .t{width:100%;border-collapse:collapse;font-size:15px}
+  .t th,.t td{padding:13px 14px;text-align:left;border-bottom:2px solid #000}
+  .t thead th{background:#000;color:#fff;font-size:11px;text-transform:uppercase;letter-spacing:.1em}
+  .t tbody tr:hover td{background:#000;color:#fff}
+  .t td.num{font-variant-numeric:tabular-nums;text-align:right}
+  .t code{font-family:var(--font-mono);font-size:13px}
+</style>
+</head>
+<body data-themes="sharp-mono,neo-brutalism,swiss-grid,engineering-whiteprint,minimal-white"
+      data-theme-base="../.claude/skills/html-ppt/assets/themes/">
+<div class="deck">
+
+  <!-- ===== 1 · COVER (section 1) ===== -->
+  <section class="slide" data-title="Cover">
+    <div class="deck-header"><span class="eyebrow">内部技术分享 · AI 编程实战</span><span class="eyebrow">pm-coach</span></div>
+    <p class="kicker anim-fade-down" data-anim="fade-down">pm-coach · Claude Plugin</p>
+    <h1 class="h1 anim-rise-in" data-anim="rise-in">用 <span class="accent">AI 插件</span>，<br>把 PM 流程跑顺</h1>
+    <p class="lede">spec → plan → implement 的 AI 辅助实践。本地文件做主线，人在关键节点卡口。</p>
+    <div class="row wrap mt-l" style="gap:10px">
+      <span class="pill pill-accent">/pm-init</span>
+      <span class="pill">/pm-spec</span>
+      <span class="pill">/pm-plan</span>
+      <span class="pill">/pm-related</span>
+    </div>
+    <div class="deck-footer"><span class="dim2 mono">/plugin install pm-coach@infra-fe-ai-resources</span><span class="slide-number" data-current="1" data-total="9"></span></div>
+  </section>
+
+  <!-- ===== 2 · 核心心智模型 (section 2 · two-column) ===== -->
+  <section class="slide" data-title="心智模型">
+    <p class="kicker">Mindset · 核心心智</p>
+    <h2 class="h2">本地文件优先，GitLab 只发布</h2>
+    <div class="grid g2 mt-l" style="align-items:start">
+      <div class="card" style="box-shadow:5px 5px 0 #000">
+        <span class="pill pill-accent">CANONICAL</span>
+        <h3 class="mt-m">本地 SPEC / plan</h3>
+        <p class="dim">是真相源头。反复跑只处理新增内容，不重写。</p>
+      </div>
+      <div class="card" style="box-shadow:5px 5px 0 #000">
+        <span class="pill">DERIVED</span>
+        <h3 class="mt-m">GitLab issue / milestone</h3>
+        <p class="dim">只是发布地。push 同步过去，可被本地覆盖。</p>
+      </div>
+    </div>
+    <p class="dim2 mt-l" style="font-size:13px">需求 issue 在 spec_project，代码 + 本地文件在 code_project。</p>
+    <div class="deck-footer"><span class="dim2">mindset</span><span class="slide-number" data-current="2" data-total="9"></span></div>
+  </section>
+
+  <!-- ===== 3 · /pm-init (section 3 · code) ===== -->
+  <section class="slide" data-title="pm-init">
+    <p class="kicker">Step · /pm-init</p>
+    <h2 class="h2">跑一次，写入 CLAUDE.md</h2>
+    <div class="grid g2 mt-l" style="align-items:start">
+      <div>
+        <ul style="list-style:none;padding:0;margin:0;line-height:2;color:var(--text-2)">
+          <li>✓ 校验 <b>glab</b>、选语言</li>
+          <li>✓ 确认两个项目</li>
+          <li>✓ 建标签、分角色</li>
+          <li>✓ 写入 <code>CLAUDE.md</code></li>
+        </ul>
+        <p class="dim2 mt-m" style="font-size:13px">幂等，可重跑。</p>
+      </div>
+<pre class="codeblock"><span class="c">## pm-coach config</span>
+<span class="k">code_project</span>:  <span class="v">klmobile/web</span>
+<span class="k">spec_project</span>:  <span class="v">infra-fe/klmobile-specs</span>
+<span class="k">labels</span>:  [AI:In Progress, AI:Done, AI:Human Review]</pre>
+    </div>
+    <div class="deck-footer"><span class="dim2 mono">/pm-init</span><span class="slide-number" data-current="3" data-total="9"></span></div>
+  </section>
+
+  <!-- ===== 4 · /pm-spec (section 4 · two-column) ===== -->
+  <section class="slide" data-title="pm-spec">
+    <p class="kicker">Step · /pm-spec</p>
+    <h2 class="h2">explore 摸清全貌，push 发 SPEC</h2>
+    <div class="grid g2 mt-l" style="align-items:start">
+      <div class="card" style="box-shadow:5px 5px 0 #000">
+        <h3>explore 做什么</h3>
+        <p class="dim mt-s">读评论、关联 issue、相关 commit diff，交 <b>issue-explore agent</b> 汇总成本地 SPEC。</p>
+        <p class="dim2 mt-s mono" style="font-size:13px">/pm-spec explore 100</p>
+      </div>
+      <div class="card" style="box-shadow:5px 5px 0 #000">
+        <h3>留下什么</h3>
+        <p class="dim mt-s"><code>specs/100-sso.md</code>（Summary + SPEC），<code>push</code> 发 GitLab issue。</p>
+        <p class="dim2 mt-s" style="font-size:13px">反复跑只处理新增。</p>
+      </div>
+    </div>
+    <div class="deck-footer"><span class="dim2 mono">/pm-spec</span><span class="slide-number" data-current="4" data-total="9"></span></div>
+  </section>
+
+  <!-- ===== 5 · /pm-plan (section 5 · process-steps) ===== -->
+  <section class="slide" data-title="pm-plan">
+    <p class="kicker">Step · /pm-plan</p>
+    <h2 class="h2">make → push → claim</h2>
+    <div class="steps anim-stagger-list" data-anim-target>
+      <div class="step"><div class="num">1</div><span class="cmd">make</span><h4>生成本地 plan</h4><p>读 SPEC、问澄清，拆成可领任务。</p></div>
+      <div class="step"><div class="num">2</div><span class="cmd">push</span><h4>建 task issue</h4><p>每任务一个 issue，挂 feature 下。</p></div>
+      <div class="step"><div class="num">3</div><span class="cmd">claim</span><h4>派 agent 实现</h4><p>建分支、写码跑测试、产 draft MR。</p></div>
+    </div>
+    <p class="dim2 mt-l mono" style="font-size:13px">/pm-plan push @plans/100-sso.md &nbsp;→&nbsp; task #150/151/152</p>
+    <div class="deck-footer"><span class="dim2">/pm-plan</span><span class="slide-number" data-current="5" data-total="9"></span></div>
+  </section>
+
+  <!-- ===== 6 · 支撑件 (section 6 · bullets) ===== -->
+  <section class="slide" data-title="支撑件">
+    <p class="kicker">Support · 三个支撑件</p>
+    <h2 class="h2">让流程更稳的辅助能力</h2>
+    <ul class="anim-stagger-list" style="list-style:none;padding:0;margin:22px 0 0;gap:14px;display:grid" data-anim-target>
+      <li class="card" style="box-shadow:4px 4px 0 #000;padding:16px 22px"><h4>/pm-related · 跨项目依赖</h4><p class="dim">登记依赖仓库，扫到别的 repo 的 commit。<span class="dim2 mono"> /pm-related add ../auth-clone</span></p></li>
+      <li class="card" style="box-shadow:4px 4px 0 #000;padding:16px 22px"><h4>issue-explore agent · 探索主力</h4><p class="dim">递归关联 issue、读 commit diff、汇总成 Summary。</p></li>
+      <li class="card" style="box-shadow:4px 4px 0 #000;padding:16px 22px"><h4>Figma 设计探索</h4><p class="dim">带 Figma 时分析组件 / token 复用 → <code>.design.md</code>。</p></li>
+    </ul>
+    <div class="deck-footer"><span class="dim2">support</span><span class="slide-number" data-current="6" data-total="9"></span></div>
+  </section>
+
+  <!-- ===== 7 · 产物清单 (section 7 · table) ===== -->
+  <section class="slide" data-title="产物">
+    <p class="kicker">Artifacts · 对得上号的产物</p>
+    <h2 class="h2">流程留下一组一一对应的文件与 issue</h2>
+    <div class="card mt-l" style="padding:6px 14px;box-shadow:5px 5px 0 #000">
+      <table class="t">
+        <thead><tr><th>类型</th><th>位置 / 内容</th></tr></thead>
+        <tbody>
+          <tr><td><b>本地 SPEC</b></td><td><code>specs/100-sso.md</code> — 权威源头</td></tr>
+          <tr><td><b>本地 plan</b></td><td><code>plans/100-sso.md</code> — 含 tasks[].iid / status</td></tr>
+          <tr><td><b>GitLab</b></td><td>SPEC #101 · feature #100 · task #150…</td></tr>
+          <tr><td><b>标签体系</b></td><td>AI:In Progress · AI:Done · AI:Human Review</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="deck-footer"><span class="dim2">artifacts</span><span class="slide-number" data-current="7" data-total="9"></span></div>
+  </section>
+
+  <!-- ===== 8 · 为什么能跑 (section 8 · big-quote) ===== -->
+  <section class="slide center tc" data-title="为什么能跑">
+    <div style="max-width:1020px">
+      <div class="bigquote" style="font-size:120px;line-height:.8;color:var(--accent-3)">&ldquo;</div>
+      <blockquote class="bigquote anim-fade-up" data-anim="fade-up" style="font-size:46px;margin:-12px 0 22px">
+        命令很薄，活甩给 skill 和 agent；<br>本地是权威，<span class="accent">人在卡口把关</span>。
+      </blockquote>
+      <p class="dim2" style="font-size:14px;letter-spacing:.1em;text-transform:uppercase">SPEC + Plan 双 user-confirmed-done 才允许 claim · 卡住标 AI:Human Review</p>
+    </div>
+    <div class="deck-footer"><span class="dim2">why it works</span><span class="slide-number" data-current="8" data-total="9"></span></div>
+  </section>
+
+  <!-- ===== 9 · THANKS ===== -->
+  <section class="slide center tc" data-title="Thanks">
+    <div>
+      <h1 class="h1" style="font-size:160px;line-height:1">Q <span class="accent">&amp;</span> A</h1>
+      <p class="lede" style="margin:16px auto 0">pm-coach · 让 AI 把 PM 流程跑顺</p>
+      <p class="dim2 mt-m" style="font-size:14px;letter-spacing:.1em;text-transform:uppercase">分享人 · 待填</p>
+    </div>
+    <div class="deck-footer"><span class="dim2">end</span><span class="slide-number" data-current="9" data-total="9"></span></div>
+  </section>
+
+</div>
+<script src="../.claude/skills/html-ppt/assets/runtime.js"></script>
+</body>
+</html>

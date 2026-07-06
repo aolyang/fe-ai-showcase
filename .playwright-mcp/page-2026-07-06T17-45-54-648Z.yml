@@ -1,0 +1,381 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - generic:
+      - generic:
+        - generic: 前端工程 · 技术分享
+        - generic: "2026"
+      - paragraph: Tech Sharing · 2026
+      - heading "前端 AI 编程实战" [level=1]
+      - generic:
+        - generic: ISSUE
+        - generic: →
+        - generic: AGENTS
+        - generic: →
+        - generic: CODE
+        - generic: →
+        - generic: 按时下班
+      - paragraph: 分享人 - 欧阳志强
+      - generic:
+        - generic: 分享人 - 欧阳志强
+        - generic: 2 / 19
+    - generic [ref=e3]:
+      - paragraph [ref=e4]: Agenda
+      - heading "大纲" [level=2] [ref=e5]
+      - generic [ref=e6]:
+        - generic [ref=e7]:
+          - paragraph [ref=e8]: Commands · 命令
+          - generic [ref=e9]:
+            - generic [ref=e10]:
+              - code [ref=e11]: /pm-init
+              - generic [ref=e12]: setup · 一次性配置
+            - generic [ref=e13]:
+              - code [ref=e14]: /pm-spec
+              - generic [ref=e15]: explore · push · done
+            - generic [ref=e16]:
+              - code [ref=e17]: /pm-plan
+              - generic [ref=e18]: make · push · claim
+            - generic [ref=e19]:
+              - code [ref=e20]: /figma-design-explore
+              - generic [ref=e21]: 设计资源 → 代码
+        - generic [ref=e23]:
+          - paragraph [ref=e24]: Lifecycle · 一个需求的完整流程
+          - generic [ref=e25]:
+            - code [ref=e26]: "/pm-init # 一次性 · code repo"
+            - generic [ref=e27]:
+              - generic [ref=e28]: spec
+              - text: per feature
+            - code [ref=e29]: /pm-spec explore ⇒ 本地 SPEC
+            - code [ref=e30]: /pm-spec push ⇒ SPEC issue
+            - code [ref=e31]: /pm-spec done ⇒ gate ✓
+            - generic [ref=e33]: plan
+            - code [ref=e34]: /pm-plan make ⇒ 本地 plan
+            - code [ref=e35]: /pm-plan push ⇒ task issues
+            - code [ref=e36]: /pm-plan done ⇒ gate ✓
+            - code [ref=e37]: /pm-plan claim ⇒ 分支 + draft MR
+      - generic:
+        - generic: agenda
+        - generic: 2 / 19
+    - generic:
+      - generic:
+        - paragraph: Section · 01
+        - heading "为什么" [level=1]
+        - paragraph: 先回答「为什么要做」，再谈「怎么做」。
+      - generic:
+        - generic: part 01 / why
+        - generic: 3 / 19
+    - generic:
+      - paragraph: Why · 时间花在哪
+      - heading "我们的时间，其实花在了这些地方" [level=2]
+      - generic:
+        - generic:
+          - heading "样板 / 脚手架" [level=4]
+          - paragraph: 组件、路由、表单、CRUD，重复的结构性代码。
+        - generic:
+          - heading "重构 / 迁移" [level=4]
+          - paragraph: 换栈、升级版本、遗留代码改造。
+        - generic:
+          - heading "调试 / 排错" [level=4]
+          - paragraph: 读报错、定位边界、补回归用例。
+        - generic:
+          - heading "文档 / 测试" [level=4]
+          - paragraph: 注释、README、单测——总被推迟的那部分。
+      - generic:
+        - generic: why · pain points
+        - generic: 4 / 19
+    - generic:
+      - generic:
+        - paragraph: The Shift
+        - generic: 0%
+        - heading "的新增代码，可由 AI 协助生成" [level=3]
+        - paragraph: ［占位数据 · 请替换为你团队的真实数字与来源］
+      - generic:
+        - generic: stat
+        - generic: 5 / 19
+    - generic:
+      - generic:
+        - paragraph: Section · 02
+        - heading "工具全景" [level=1]
+        - paragraph: 不盲从热度，按场景选工具。
+      - generic:
+        - generic: part 02 / landscape
+        - generic: 6 / 19
+    - generic:
+      - paragraph: Landscape · 主流工具
+      - heading "主流 AI 编程工具对比" [level=2]
+      - generic:
+        - table:
+          - rowgroup:
+            - row "工具 类型 上下文 Agent 能力 适合场景":
+              - columnheader "工具"
+              - columnheader "类型"
+              - columnheader "上下文"
+              - columnheader "Agent 能力"
+              - columnheader "适合场景"
+          - rowgroup:
+            - row "Claude Code CLI / Agent 整库 + 终端 ★★★★★ 跨文件重构、自动化任务流":
+              - cell "Claude Code"
+              - cell "CLI / Agent"
+              - cell "整库 + 终端"
+              - cell "★★★★★"
+              - cell "跨文件重构、自动化任务流"
+            - row "Cursor IDE (Fork) 整库索引 ★★★★ 日常编码、Composer 多文件":
+              - cell "Cursor"
+              - cell "IDE (Fork)"
+              - cell "整库索引"
+              - cell "★★★★"
+              - cell "日常编码、Composer 多文件"
+            - row "GitHub Copilot 插件 当前文件为主 ★★★ 行内补全、Chat":
+              - cell "GitHub Copilot"
+              - cell "插件"
+              - cell "当前文件为主"
+              - cell "★★★"
+              - cell "行内补全、Chat"
+            - row "Windsurf IDE (Fork) 整库索引 ★★★★ Cascade 流程化任务":
+              - cell "Windsurf"
+              - cell "IDE (Fork)"
+              - cell "整库索引"
+              - cell "★★★★"
+              - cell "Cascade 流程化任务"
+            - row "通义灵码 / CodeGeeX 插件 当前文件 ★★★ 国产、合规友好":
+              - cell "通义灵码 / CodeGeeX"
+              - cell "插件"
+              - cell "当前文件"
+              - cell "★★★"
+              - cell "国产、合规友好"
+      - generic:
+        - generic: tools · compare
+        - generic: 7 / 19
+    - generic:
+      - paragraph: How to choose
+      - heading "按场景选，而不是按热度" [level=2]
+      - generic:
+        - generic:
+          - generic: 日常编码
+          - heading "IDE 内 · 行级 / 文件级" [level=3]
+          - paragraph:
+            - text: 补全、解释、重构单个组件。
+            - text: 代表：Cursor、Copilot、Windsurf。
+            - text: 关键看：上下文索引质量、响应速度。
+        - generic:
+          - generic: 复杂任务
+          - heading "Agent / CLI · 跨文件" [level=3]
+          - paragraph:
+            - text: 需求拆解、多文件改造、跑命令验证。
+            - text: 代表：Claude Code。
+            - text: 关键看：自主性、可验证、可回滚。
+      - generic:
+        - generic: choose by scenario
+        - generic: 8 / 19
+    - generic:
+      - generic:
+        - paragraph: Section · 03
+        - heading "心智模型" [level=1]
+        - paragraph: 角色变了——你是技术负责人，AI 是你的执行者。
+      - generic:
+        - generic: part 03 / mindset
+        - generic: 9 / 19
+    - generic:
+      - generic:
+        - generic: “
+        - blockquote:
+          - text: 你不是在写代码，
+          - text: 你在带一个 AI 团队。
+        - paragraph: — 给前端工程师的新角色定义
+      - generic:
+        - generic: mindset
+        - generic: 10 / 19
+    - generic:
+      - generic:
+        - paragraph: Section · 04
+        - heading "实战流程" [level=1]
+        - paragraph: 这是整场分享的核心：一套可复用的 AI 编程闭环。
+      - generic:
+        - generic: part 04 / practice
+        - generic: 11 / 19
+    - generic:
+      - paragraph: Loop · AI 编程闭环
+      - heading "四步一个循环，持续迭代" [level=2]
+      - generic:
+        - generic:
+          - generic: "1"
+          - heading "拆解需求" [level=4]
+          - paragraph: 把大任务拆成可验证的小步，明确 Done 标准。
+          - generic: PLAN
+        - generic:
+          - generic: "2"
+          - heading "准备上下文" [level=4]
+          - paragraph: 写好 CLAUDE.md / rules，给出栈、约束、示例。
+          - generic: CONTEXT
+        - generic:
+          - generic: "3"
+          - heading "生成迭代" [level=4]
+          - paragraph: 分步要 diff，跑通即提交，不追求一次成型。
+          - generic: GENERATE
+        - generic:
+          - generic: "4"
+          - heading "评审测试" [level=4]
+          - paragraph: 人审业务与安全，补测试，沉淀经验回上下文。
+          - generic: REVIEW
+      - paragraph: ↻ 每轮把新经验写回 CLAUDE.md，下一轮更强
+      - generic:
+        - generic: the loop
+        - generic: 12 / 19
+    - generic:
+      - paragraph: Context Engineering
+      - heading "上下文质量，决定生成质量" [level=2]
+      - generic:
+        - generic:
+          - heading "该写什么" [level=3]
+          - list:
+            - listitem: 技术栈与版本（React 18 / TS 5 / pnpm）
+            - listitem: 硬约束（禁止 class 组件、禁内联 style）
+            - listitem: 目录与命名约定
+            - listitem: 测试与提交规范
+            - listitem: 易错点 / 业务术语
+        - generic:
+          - generic: "# CLAUDE.md（项目上下文） - 栈: React 18 + TS 5 + Vite + Tailwind - 包管理: pnpm（勿用 npm/yarn） - 组件: 函数组件 + hooks，不放 class - 样式: Tailwind utility，禁止内联 style - 测试: Vitest，工具函数都要有用例 - 提交: Conventional Commits"
+      - generic:
+        - generic: context
+        - generic: 13 / 19
+    - generic:
+      - paragraph: Prompt · 前端场景
+      - heading "五条提示词技巧" [level=2]
+      - list:
+        - listitem:
+          - heading "① 给约束" [level=4]
+          - paragraph: 先说栈、版本、风格，再下任务。例：「用 React 18 + TS，不要 any」。
+        - listitem:
+          - heading "② 给边界" [level=4]
+          - paragraph: 明确「不要做什么」，比说「做什么」更能收敛结果。
+        - listitem:
+          - heading "③ 给示例" [level=4]
+          - paragraph: 贴一个现有组件作为风格参照，比描述一千字管用。
+        - listitem:
+          - heading "④ 分步，别一次成型" [level=4]
+          - paragraph: 大模块拆成小步，每步可跑、可验、可回滚。
+        - listitem:
+          - heading "⑤ 要 diff，不要重写" [level=4]
+          - paragraph: 让 AI 改动局部并解释 diff，保留你对代码的控制权。
+      - generic:
+        - generic: prompt tips
+        - generic: 14 / 19
+    - generic:
+      - paragraph: Review & Safety
+      - heading "哪些交给 AI，哪些必须人审" [level=2]
+      - generic:
+        - generic:
+          - heading "✓ 适合交给 AI" [level=3]:
+            - generic: ✓
+            - text: 适合交给 AI
+          - list:
+            - listitem: 样板 / 脚手架代码
+            - listitem: 单元测试与用例
+            - listitem: 纯函数重构、命名优化
+            - listitem: 注释、文档、i18n 文案
+            - listitem: 常规 Bug 的定位与修复建议
+        - generic:
+          - heading "✗ 必须人审" [level=3]:
+            - generic: ✗
+            - text: 必须人审
+          - list:
+            - listitem: 核心业务逻辑与状态机
+            - listitem: 鉴权、支付、权限边界
+            - listitem: 敏感数据与密钥处理
+            - listitem: 架构与依赖决策
+            - listitem: 性能关键路径与并发
+      - generic:
+        - generic: review · safety
+        - generic: 15 / 19
+    - generic:
+      - paragraph: Metrics · 怎么衡量
+      - heading "用四个指标，量化 AI 带来的提升" [level=2]
+      - generic:
+        - generic:
+          - paragraph: 编码速度
+          - generic: 0%
+          - paragraph: ↑ 待填
+        - generic:
+          - paragraph: 评审通过率
+          - generic: 0%
+          - paragraph: ↑ 待填
+        - generic:
+          - paragraph: 线上缺陷率
+          - generic: 0%
+          - paragraph: ↓ 待填
+        - generic:
+          - paragraph: 返工率
+          - generic: 0%
+          - paragraph: ↓ 待填
+      - paragraph: ［数字为占位，请替换为团队真实度量，并标注口径与样本］
+      - generic:
+        - generic: metrics
+        - generic: 16 / 19
+    - generic:
+      - paragraph: Pitfalls · 反模式
+      - heading "五个常见坑，别踩" [level=2]
+      - generic:
+        - generic:
+          - heading "盲信生成" [level=4]
+          - paragraph: 能跑 ≠ 正确。不读就提交，迟早出事。
+        - generic:
+          - heading "上下文缺失" [level=4]
+          - paragraph: 不给约束就开干，结果风格全乱。
+        - generic:
+          - heading "一次写整个模块" [level=4]
+          - paragraph: 大任务不分步，不可验、不可回滚。
+        - generic:
+          - heading "跳过测试就合并" [level=4]
+          - paragraph: AI 写的代码也需要门禁兜底。
+        - generic:
+          - heading "把密钥贴进 Prompt" [level=4]
+          - paragraph: 敏感信息一旦出境，无法回收。
+        - generic:
+          - heading "不沉淀经验" [level=4]
+          - paragraph: 踩过的坑不写回上下文，下次重来。
+      - generic:
+        - generic: anti-patterns
+        - generic: 17 / 19
+    - generic:
+      - paragraph: Roadmap · 团队落地
+      - heading "四个阶段，把 AI 编程变成团队习惯" [level=2]
+      - generic:
+        - generic:
+          - generic: Now · 试点
+          - heading "自愿者先行" [level=4]
+          - list:
+            - listitem: 选 2-3 个非核心模块
+            - listitem: 定工具与基线
+            - listitem: 记录耗时与问题
+        - generic:
+          - generic: Next · 规范
+          - heading "建立公约" [level=4]
+          - list:
+            - listitem: CLAUDE.md 模板
+            - listitem: 评审与安全清单
+            - listitem: 密钥与数据红线
+        - generic:
+          - generic: Later · 工具链
+          - heading "嵌入流程" [level=4]
+          - list:
+            - listitem: CI 门禁 + 测试
+            - listitem: 提示词片段库
+            - listitem: Agent 任务模板
+        - generic:
+          - generic: Vision
+          - heading "度量文化" [level=4]
+          - list:
+            - listitem: 持续追踪指标
+            - listitem: 复盘与分享
+            - listitem: 反哺上下文
+      - generic:
+        - generic: roadmap
+        - generic: 18 / 19
+    - generic:
+      - generic:
+        - heading "Q & A" [level=1]
+        - paragraph: 谢谢聆听 · 欢迎交流
+        - paragraph: 欧阳志强
+      - generic:
+        - generic: end
+        - generic: 19 / 19
+  - text: 1 / 19 2 / 19 3 / 19 4 / 19 5 / 19 6 / 19 7 / 19 8 / 19 9 / 19 10 / 19 11 / 19 12 / 19 13 / 19 14 / 19 15 / 19 16 / 19 17 / 19 18 / 19 19 / 19

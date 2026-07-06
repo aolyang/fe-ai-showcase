@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="sharp-mono">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>前端 AI 编程实战 · 技术分享</title>
+<link rel="stylesheet" href="../.claude/skills/html-ppt/assets/fonts.css">
+<link rel="stylesheet" href="../.claude/skills/html-ppt/assets/base.css">
+<link rel="stylesheet" id="theme-link" href="../.claude/skills/html-ppt/assets/themes/sharp-mono.css">
+<link rel="stylesheet" href="../.claude/skills/html-ppt/assets/animations/animations.css">
+<style>
+  /* ===== sharp-mono deck tuning ===== */
+  /* red kickers + emphasis (theme 默认 accent 是黑色，用 --accent-3 提色) */
+  .kicker{color:var(--accent-3)}
+  .accent{color:var(--accent-3);font-weight:800}
+  /* 在纯黑白主题下，pill 默认是黑底深字=不可见，这里反转 */
+  .pill{background:#000;color:#fff;border:2px solid #000;border-radius:0}
+  .pill-accent{background:var(--accent-3);color:#fff;border:2px solid var(--accent-3)}
+  /* 黑底白字代码块 */
+  .codeblock{background:#000;color:#fff;border:2px solid #000;box-shadow:4px 4px 0 #000;
+    padding:20px 22px;font-size:13.5px;line-height:1.75;overflow:auto;border-radius:0;margin:0;
+    font-family:var(--font-mono)}
+  .codeblock .c{color:#7a7a7a}      /* comment */
+  .codeblock .k{color:#ff5c5c}       /* key */
+  .codeblock .v{color:#ffd866}       /* value */
+  /* 大引号 */
+  .bigquote{font-family:var(--font-display);font-weight:800;line-height:1.15;
+    letter-spacing:var(--letter-tight);text-transform:uppercase}
+  .bigquote .mark{color:var(--accent-3)}
+
+  /* ===== process steps ===== */
+  .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:22px;margin-top:34px}
+  .step{position:relative;padding:28px 22px 20px;border:2px solid #000;background:var(--surface);
+    box-shadow:4px 4px 0 #000}
+  .step .num{position:absolute;top:-22px;left:18px;width:46px;height:46px;border-radius:50%;
+    background:#000;color:#fff;display:flex;align-items:center;justify-content:center;
+    font-weight:800;font-size:18px;border:2px solid #000;box-shadow:3px 3px 0 var(--accent-3)}
+  .step h4{margin:14px 0 8px;font-size:17px;text-transform:uppercase;letter-spacing:.02em}
+  .step p{font-size:13px;color:var(--text-2);line-height:1.6;margin:0}
+  .step .tag{display:inline-block;margin-top:12px;font-size:11px;padding:3px 10px;
+    background:#000;color:#fff;letter-spacing:.06em}
+
+  /* ===== table ===== */
+  .t{width:100%;border-collapse:collapse;font-size:15px}
+  .t th,.t td{padding:13px 14px;text-align:left;border-bottom:2px solid #000}
+  .t thead th{background:#000;color:#fff;font-size:11px;text-transform:uppercase;letter-spacing:.1em;
+    border-bottom:2px solid #000}
+  .t tbody tr:hover td{background:#000;color:#fff}
+  .t td.num{font-variant-numeric:tabular-nums;text-align:right}
+  .t b{font-weight:800}
+
+  /* ===== roadmap ===== */
+  .rm{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:30px;
+    border:2px solid #000;box-shadow:6px 6px 0 #000}
+  .rm .col{padding:22px 20px;border-right:2px solid #000;background:var(--surface)}
+  .rm .col:last-child{border-right:none}
+  .rm .col .tag{display:inline-block;padding:4px 12px;font-size:11px;background:#000;color:#fff;
+    letter-spacing:.08em;text-transform:uppercase}
+  .rm .col.now{background:var(--accent-3)}
+  .rm .col.now .tag{background:#fff;color:#000}
+  .rm .col.now h4,.rm .col.now li,.rm .col.now span{color:#fff}
+  .rm h4{font-size:16px;margin:12px 0 6px;text-transform:uppercase;letter-spacing:.02em}
+  .rm ul{padding-left:18px;margin:8px 0 0;font-size:13px;color:var(--text-2);line-height:1.6}
+
+  /* ===== pros / cons ===== */
+  .pc{display:grid;grid-template-columns:1fr 1fr;gap:26px;margin-top:30px}
+  .pc .card{border:2px solid #000;box-shadow:4px 4px 0 #000}
+  .pc .card h3{display:flex;align-items:center;gap:12px;font-size:22px;
+    text-transform:uppercase;letter-spacing:.02em;margin:0 0 6px}
+  .pc .card h3 .b{display:inline-flex;width:38px;height:38px;border:2px solid #000;
+    align-items:center;justify-content:center;font-size:18px;font-weight:800}
+  .pc .pro{border-top:8px solid var(--good)}
+  .pc .con{border-top:8px solid var(--bad)}
+  .pc .pro h3 .b{background:var(--good);color:#fff}
+  .pc .con h3 .b{background:var(--bad);color:#fff}
+  .pc ul{padding-left:22px;line-height:1.85;color:var(--text-2);margin:8px 0 0}
+  .pc li{font-size:15px}
+
+  /* ===== kpi ===== */
+  .kpi .eyebrow{font-size:12px}
+  .kpi .num{font-size:60px;font-weight:800;line-height:1;letter-spacing:var(--letter-tight)}
+
+  /* ===== bigger base type + cover flow / presenter ===== */
+  .slide{font-size:18px}
+  h1.title,.h1{font-size:88px}
+  h2.title,.h2{font-size:64px}
+  .lede{font-size:26px}
+  .flow{display:flex;align-items:center;gap:16px;font-family:var(--font-mono);font-weight:800;
+    font-size:26px;letter-spacing:.06em;text-transform:uppercase;margin-top:30px}
+  .flow .stage{padding:9px 20px;border:2px solid #000;background:#000;color:#fff;box-shadow:4px 4px 0 #000}
+  .flow .stage.last{background:var(--accent-3)}
+  .flow .arr{font-size:30px;color:var(--accent-3);font-weight:900}
+  .presenter{font-family:var(--font-display);font-size:32px;font-weight:800;
+    text-transform:uppercase;letter-spacing:.04em;margin-top:34px}
+
+  /* ===== two-column agenda (cards | divider | steps) ===== */
+  .twocol{display:flex;gap:40px;margin-top:30px;align-items:stretch}
+  .twocol .col-left{width:300px;flex:none}
+  .twocol .cardlist{display:flex;flex-direction:column;gap:10px}
+  .twocol .cardlist .card{padding:14px 16px}
+  .twocol .cardlist h4{font-family:var(--font-mono);font-size:18px;font-weight:800;
+    text-transform:none;margin:0 0 5px}
+  .twocol .vdiv{width:2px;background:#000;align-self:stretch}
+  .twocol .col-right{flex:1;padding:16px}
+  .wsteps{list-style:none;padding:0;margin:6px 0 0;counter-reset:s}
+  .wsteps > li{counter-increment:s;padding:14px 0;border-bottom:1px solid rgba(0,0,0,.15);
+    font-size:22px;line-height:2.5}
+  .wsteps > li:last-child{border-bottom:none}
+  .wsteps > li::before{content:counter(s,decimal-leading-zero);font-family:var(--font-mono);
+    color:var(--accent-3);font-weight:800;margin-right:12px}
+  .wsub{list-style:none;padding:0;margin:8px 0 0;font-family:var(--font-mono);
+    font-size:18px;line-height:2.3}
+  .wsub li{color:var(--text-2)}
+  .wsub li::before{content:'›  ';color:var(--accent-3);font-weight:800;margin-right:4px}
+  .wsteps code,.wsub code{font-weight:800}
+</style>
+</head>
+<body data-themes="sharp-mono,neo-brutalism,swiss-grid,engineering-whiteprint,minimal-white"
+      data-theme-base="../.claude/skills/html-ppt/assets/themes/">
+<div class="deck">
+
+  <!-- ===================== 1 · COVER ===================== -->
+  <!-- 内容待填：见 content.md 第 1 节 -->
+  <section class="slide" data-title="Cover">
+    <div class="deck-header"><span class="eyebrow">前端工程 · 技术分享</span><span class="eyebrow">2026</span></div>
+    <p class="kicker anim-fade-down" data-anim="fade-down">Tech Sharing · 2026</p>
+    <h1 class="h1 anim-rise-in" data-anim="rise-in">前端 <span class="accent">AI</span> 编程实战</h1>
+    <div class="flow anim-fade-up" data-anim="fade-up">
+      <span class="stage">ISSUE</span><span class="arr">→</span><span class="stage">AGENTS</span><span class="arr">→</span><span class="stage">CODE</span><span class="arr">→</span><span class="stage last">按时下班</span>
+    </div>
+    <p class="presenter">分享人 - 欧阳志强</p>
+    <div class="deck-footer"><span class="dim2">分享人 - 欧阳志强</span><span class="slide-number" data-current="1" data-total="19"></span></div>
+  </section>
+
+  <!-- ===================== 2 · AGENDA ===================== -->
+  <!-- 内容待填：见 content.md 第 2 节 -->
+  <section class="slide" data-title="Agenda">
+    <p class="kicker">Agenda</p>
+    <h2 class="h2">大纲 · 指令和工作流</h2>
+    <div class="twocol">
+      <div class="col-left">
+        <p class="eyebrow mb-s">Commands · 命令</p>
+        <div class="cardlist anim-stagger-list" data-anim-target>
+          <div class="card"><h4>/pm-init</h4><p class="dim">校验 glab cli，保存 GitLab 项目配置。</p></div>
+          <div class="card"><h4>/pm-spec</h4><p class="dim">issue-explore 拉取相关 issue 和提交。</p></div>
+          <div class="card"><h4>/pm-plan</h4><p class="dim">make 细化任务，claim 执行任务。</p></div>
+          <div class="card"><h4>/figma-design-explore</h4><p class="dim">分析 figma design resources，组织代码。</p></div>
+        </div>
+      </div>
+      <div class="vdiv"></div>
+      <div class="col-right">
+        <p class="eyebrow" style="margin:0">Lifecycle · 一个需求的完整流程</p>
+        <ol class="wsteps">
+          <li><b>初始化</b> — <code>/pm-init</code> 上下文建立</li>
+          <li><b>SPEC</b>
+            <ul class="wsub">
+              <li><code>/pm-spec explore</code> ⇒ 本地 SPEC</li>
+              <li><code>/pm-spec push</code> ⇒ SPEC issue</li>
+              <li><code>/pm-spec done</code> ⇒ gate ✓</li>
+            </ul>
+          </li>
+          <li><b>PLAN</b>
+            <ul class="wsub">
+              <li><code>/pm-plan make</code> ⇒ 本地 plan</li>
+              <li><code>figma-design-explore</code> ⇒ 分析设计稿</li>
+              <li><code>/pm-plan push</code> ⇒ task issues</li>
+              <li><code>/pm-plan done</code> ⇒ gate ✓</li>
+            </ul>
+          </li>
+          <li><b>CLAIM</b> — <code>/pm-plan claim</code> ⇒ 分支 + draft MR</li>
+        </ol>
+      </div>
+    </div>
+    <div class="deck-footer"><span class="dim2">agenda</span><span class="slide-number" data-current="2" data-total="19"></span></div>
+  </section>
+
+  <!-- ===================== 3 · SECTION 01 ===================== -->
+  <section class="slide center tc" data-title="Section 01">
+    <div style="max-width:880px">
+      <p class="kicker anim-fade-down" data-anim="fade-down">Section · 01</p>
+      <h1 class="h1 anim-rise-in" data-anim="rise-in" style="font-size:120px">为什么</h1>
+      <div class="divider-accent" style="margin:24px auto;width:96px;height:4px;background:var(--accent-3)"></div>
+      <p class="lede" style="margin:0 auto">先回答「为什么要做」，再谈「怎么做」。</p>
+    </div>
+    <div class="deck-footer"><span class="dim2">part 01 / why</span><span class="slide-number" data-current="3" data-total="19"></span></div>
+  </section>
+
+  <!-- ===================== 4 · 痛点 ===================== -->
+  <!-- 内容待填：见 content.md 第 4 节 -->
+  <section class="slide" data-title="痛点">
+    <p class="kicker">Why · 时间花在哪</p>
+    <h2 class="h2">我们的时间，其实花在了这些地方</h2>
+    <div class="grid g4 mt-l anim-stagger-list" data-anim-target>
+      <div class="card card-accent" style="border-top:6px solid var(--accent-3)"><h4>样板 / 脚手架</h4><p class="dim">组件、路由、表单、CRUD，重复的结构性代码。</p></div>
+      <div class="card card-accent" style="border-top:6px solid var(--accent-3)"><h4>重构 / 迁移</h4><p class="dim">换栈、升级版本、遗留代码改造。</p></div>
+      <div class="card card-accent" style="border-top:6px solid var(--accent-3)"><h4>调试 / 排错</h4><p class="dim">读报错、定位边界、补回归用例。</p></div>
+      <div class="card card-accent" style="border-top:6px solid var(--accent-3)"><h4>文档 / 测试</h4><p class="dim">注释、README、单测——总被推迟的那部分。</p></div>
+    </div>
+    <div class="deck-footer"><span class="dim2">why · pain points</span><span class="slide-number" data-current="4" data-total="19"></span></div>
+  </section>
+
+  <!-- ===================== 5 · 关键数字 ===================== -->
+  <!-- 内容待填：见 content.md 第 5 节（数字与来源） -->
+  <section class="slide center tc" data-title="Stat">
+    <div>
+      <p class="kicker">The Shift</p>
+      <div style="font-size:240px;line-height:1;font-weight:900;letter-spacing:-.04em">
+        <span class="counter accent" data-to="55">0</span><span class="accent">%</span>
+      </div>
+      <h3 class="mt-s">的新增代码，可由 AI 协助生成</h3>
+      <p class="lede" style="margin:14px auto 0">［占位数据 · 请替换为你团队的真实数字与来源］</p>
+    </div>
+    <div class="deck-footer"><span class="dim2">stat</span><span class="slide-number" data-current="5" data-total="19"></span></div>
+  </section>
+
+  <!-- ===================== 6 · SECTION 02 ===================== -->
+  <section class="slide center tc" data-title="Section 02">
+    <div style="max-width:880px">
+      <p class="kicker anim-fade-down" data-anim="fade-down">Section · 02</p>
+      <h1 class="h1 anim-rise-in" data-anim="rise-in" style="font-size:120px">工具全景</h1>
+      <div class="divider-accent" style="margin:24px auto;width:96px;height:4px;background:var(--accent-3)"></div>
+      <p class="lede" style="margin:0 auto">不盲从热度，按场景选工具。</p>
+    </div>
+    <div class="deck-footer"><span class="dim2">part 02 / landscape</span><span class="slide-number" data-current="6" data-total="19"></span></div>
+  </section>
+
+  <!-- ===================== 7 · 工具对比表 ===================== -->
+  <!-- 内容待填：见 content.md 第 7 节 -->
+  <section class="slide" data-title="工具对比">
+    <p class="kicker">Landscape · 主流工具</p>
+    <h2 class="h2">主流 AI 编程工具对比</h2>
+    <div class="card mt-l" style="padding:6px 14px;box-shadow:5px 5px 0 #000">
+      <table class="t">
+        <thead><tr><th>工具</th><th>类型</th><th>上下文</th><th>Agent 能力</th><th>适合场景</th></tr></thead>
+        <tbody>
+          <tr><td><b>Claude Code</b></td><td>CLI / Agent</td><td>整库 + 终端</td><td>★★★★★</td><td>跨文件重构、自动化任务流</td></tr>
+          <tr><td><b>Cursor</b></td><td>IDE (Fork)</td><td>整库索引</td><td>★★★★</td><td>日常编码、Composer 多文件</td></tr>
+          <tr><td><b>GitHub Copilot</b></td><td>插件</td><td>当前文件为主</td><td>★★★</td><td>行内补全、Chat</td></tr>
+          <tr><td><b>Windsurf</b></td><td>IDE (Fork)</td><td>整库索引</td><td>★★★★</td><td>Cascade 流程化任务</td></tr>
+          <tr><td><b>通义灵码 / CodeGeeX</b></td><td>插件</td><td>当前文件</td><td>★★★</td><td>国产、合规友好</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="deck-footer"><span class="dim2">tools · compare</span><span class="slide-number" data-current="7" data-total="19"></span></div>
+  </section>
+
+  <!-- ===================== 8 · 选型建议 ===================== -->
+  <!-- 内容待填：见 content.md 第 8 节 -->
+  <section class="slide" data-title="选型">
+    <p class="kicker">How to choose</p>
+    <h2 class="h2">按场景选，而不是按热度</h2>
+    <div class="grid g2 mt-l">
+      <div class="card" style="box-shadow:5px 5px 0 #000">
+        <span class="pill pill-accent">日常编码</span>
+        <h3 class="mt-m">IDE 内 · 行级 / 文件级</h3>
+        <p class="dim">补全、解释、重构单个组件。<br>代表：Cursor、Copilot、Windsurf。<br>关键看：上下文索引质量、响应速度。</p>
+      </div>
+      <div class="card" style="box-shadow:5px 5px 0 #000">
+        <span class="pill">复杂任务</span>
+        <h3 class="mt-m">Agent / CLI · 跨文件</h3>
+        <p class="dim">需求拆解、多文件改造、跑命令验证。<br>代表：Claude Code。<br>关键看：自主性、可验证、可回滚。</p>
+      </div>
+    </div>
+    <div class="deck-footer"><span class="dim2">choose by scenario</span><span class="slide-number" data-current="8" data-total="19"></span></div>
+  </section>
+
+  <!-- ===================== 9 · SECTION 03 ===================== -->
+  <section class="slide center tc" data-title="Section 03">
+    <div style="max-width:880px">
+      <p class="kicker anim-fade-down" data-anim="fade-down">Section · 03</p>
+      <h1 class="h1 anim-rise-in" data-anim="rise-in" style="font-size:120px">心智模型</h1>
+      <div class="divider-accent" style="margin:24px auto;width:96px;height:4px;background:var(--accent-3)"></div>
+      <p class="lede" style="margin:0 auto">角色变了——你是技术负责人，AI 是你的执行者。</p>
+    </div>
+    <div class="deck-footer"><span class="dim2">part 03 / mindset</span><span class="slide-number" data-current="9" data-total="19"></span></div>
+  </section>
+
+  <!-- ===================== 10 · 大引言 ===================== -->
+  <!-- 内容待填：见 content.md 第 10 节 -->
+  <section class="slide center tc" data-title="Quote">
+    <div style="max-width:1040px">
+      <div class="bigquote" style="font-size:140px;line-height:.8;color:var(--accent-3)">&ldquo;</div>
+      <blockquote class="bigquote anim-fade-up" data-anim="fade-up" style="font-size:60px;margin:-20px 0 24px">
+        你不是在写代码，<br>你在带一个 <span class="accent">AI 团队</span>。
+      </blockquote>
+      <p class="dim2" style="font-size:15px;letter-spacing:.12em;text-transform:uppercase">— 给前端工程师的新角色定义</p>
+    </div>
+    <div class="deck-footer"><span class="dim2">mindset</span><span class="slide-number" data-current="10" data-total="19"></span></div>
+  </section>
+
+  <!-- ===================== 11 · SECTION 04 ===================== -->
+  <section class="slide center tc" data-title="Section 04">
+    <div style="max-width:880px">
+      <p class="kicker anim-fade-down" data-anim="fade-down">Section · 04</p>
+      <h1 class="h1 anim-rise-in" data-anim="rise-in" style="font-size:120px">实战流程</h1>
+      <div class="divider-accent" style="margin:24px auto;width:96px;height:4px;background:var(--accent-3)"></div>
+      <p class="lede" style="margin:0 auto">这是整场分享的核心：一套可复用的 AI 编程闭环。</p>
+    </div>
+    <div class="deck-footer"><span class="dim2">part 04 / practice</span><span class="slide-number" data-current="11" data-total="19"></span></div>
+  </section>
+
+  <!-- ===================== 12 · AI 编程闭环 ===================== -->
+  <!-- 内容待填：见 content.md 第 12 节 -->
+  <section class="slide" data-title="闭环">
+    <p class="kicker">Loop · AI 编程闭环</p>
+    <h2 class="h2">四步一个循环，持续迭代</h2>
+    <div class="steps anim-stagger-list" data-anim-target>
+      <div class="step"><div class="num">1</div><h4>拆解需求</h4><p>把大任务拆成可验证的小步，明确 Done 标准。</p><span class="tag">PLAN</span></div>
+      <div class="step"><div class="num">2</div><h4>准备上下文</h4><p>写好 CLAUDE.md / rules，给出栈、约束、示例。</p><span class="tag">CONTEXT</span></div>
+      <div class="step"><div class="num">3</div><h4>生成迭代</h4><p>分步要 diff，跑通即提交，不追求一次成型。</p><span class="tag">GENERATE</span></div>
+      <div class="step"><div class="num">4</div><h4>评审测试</h4><p>人审业务与安全，补测试，沉淀经验回上下文。</p><span class="tag">REVIEW</span></div>
+    </div>
+    <p class="dim2 mt-l" style="font-size:13px;letter-spacing:.08em;text-transform:uppercase">↻ 每轮把新经验写回 CLAUDE.md，下一轮更强</p>
+    <div class="deck-footer"><span class="dim2">the loop</span><span class="slide-number" data-current="12" data-total="19"></span></div>
+  </section>
+
+  <!-- ===================== 13 · 上下文工程 ===================== -->
+  <!-- 内容待填：见 content.md 第 13 节 -->
+  <section class="slide" data-title="上下文">
+    <p class="kicker">Context Engineering</p>
+    <h2 class="h2">上下文质量，决定生成质量</h2>
+    <div class="grid g2 mt-l" style="align-items:start">
+      <div class="card" style="box-shadow:5px 5px 0 #000">
+        <h3>该写什么</h3>
+        <ul class="mt-s" style="line-height:1.9;color:var(--text-2);padding-left:20px">
+          <li><b>技术栈与版本</b>（React 18 / TS 5 / pnpm）</li>
+          <li><b>硬约束</b>（禁止 class 组件、禁内联 style）</li>
+          <li><b>目录与命名约定</b></li>
+          <li><b>测试与提交规范</b></li>
+          <li><b>易错点 / 业务术语</b></li>
+        </ul>
+      </div>
+      <div>
+<pre class="codeblock"><span class="c"># CLAUDE.md（项目上下文）</span>
+- <span class="k">栈</span>: React 18 + TS 5 + Vite + Tailwind
+- <span class="k">包管理</span>: <span class="v">pnpm</span>（勿用 npm/yarn）
+- <span class="k">组件</span>: 函数组件 + hooks，不放 class
+- <span class="k">样式</span>: Tailwind utility，禁止内联 style
+- <span class="k">测试</span>: Vitest，工具函数都要有用例
+- <span class="k">提交</span>: Conventional Commits</pre>
+      </div>
+    </div>
+    <div class="deck-footer"><span class="dim2">context</span><span class="slide-number" data-current="13" data-total="19"></span></div>
+  </section>
+
+  <!-- ===================== 14 · 提示词技巧 ===================== -->
+  <!-- 内容待填：见 content.md 第 14 节 -->
+  <section class="slide" data-title="提示词">
+    <p class="kicker">Prompt · 前端场景</p>
+    <h2 class="h2">五条提示词技巧</h2>
+    <ul class="anim-stagger-list" style="list-style:none;padding:0;margin:20px 0 0;gap:12px;display:grid;grid-template-columns:1fr 1fr" data-anim-target>
+      <li class="card" style="box-shadow:4px 4px 0 #000;padding:16px 20px"><h4>① 给约束</h4><p class="dim">先说栈、版本、风格，再下任务。例：「用 React 18 + TS，不要 any」。</p></li>
+      <li class="card" style="box-shadow:4px 4px 0 #000;padding:16px 20px"><h4>② 给边界</h4><p class="dim">明确「不要做什么」，比说「做什么」更能收敛结果。</p></li>
+      <li class="card" style="box-shadow:4px 4px 0 #000;padding:16px 20px"><h4>③ 给示例</h4><p class="dim">贴一个现有组件作为风格参照，比描述一千字管用。</p></li>
+      <li class="card" style="box-shadow:4px 4px 0 #000;padding:16px 20px"><h4>④ 分步，别一次成型</h4><p class="dim">大模块拆成小步，每步可跑、可验、可回滚。</p></li>
+      <li class="card" style="box-shadow:4px 4px 0 #000;padding:16px 20px;grid-column:1/-1"><h4>⑤ 要 diff，不要重写</h4><p class="dim">让 AI 改动局部并解释 diff，保留你对代码的控制权。</p></li>
+    </ul>
+    <div class="deck-footer"><span class="dim2">prompt tips</span><span class="slide-number" data-current="14" data-total="19"></span></div>
+  </section>
+
+  <!-- ===================== 15 · 评审与安全 ===================== -->
+  <!-- 内容待填：见 content.md 第 15 节 -->
+  <section class="slide" data-title="评审与安全">
+    <p class="kicker">Review &amp; Safety</p>
+    <h2 class="h2">哪些交给 AI，哪些必须人审</h2>
+    <div class="pc">
+      <div class="card pro anim-fade-up" data-anim="fade-up"><h3><span class="b">✓</span>适合交给 AI</h3>
+        <ul>
+          <li>样板 / 脚手架代码</li>
+          <li>单元测试与用例</li>
+          <li>纯函数重构、命名优化</li>
+          <li>注释、文档、i18n 文案</li>
+          <li>常规 Bug 的定位与修复建议</li>
+        </ul>
+      </div>
+      <div class="card con anim-fade-up" data-anim="fade-up"><h3><span class="b">✗</span>必须人审</h3>
+        <ul>
+          <li>核心业务逻辑与状态机</li>
+          <li>鉴权、支付、权限边界</li>
+          <li>敏感数据与密钥处理</li>
+          <li>架构与依赖决策</li>
+          <li>性能关键路径与并发</li>
+        </ul>
+      </div>
+    </div>
+    <div class="deck-footer"><span class="dim2">review · safety</span><span class="slide-number" data-current="15" data-total="19"></span></div>
+  </section>
+
+  <!-- ===================== 16 · 效率度量 ===================== -->
+  <!-- 内容待填：见 content.md 第 16 节（数字待替换） -->
+  <section class="slide" data-title="度量">
+    <p class="kicker">Metrics · 怎么衡量</p>
+    <h2 class="h2">用四个指标，量化 AI 带来的提升</h2>
+    <div class="grid g4 mt-l kpi anim-stagger-list" data-anim-target>
+      <div class="card kpi" style="box-shadow:5px 5px 0 #000"><p class="eyebrow">编码速度</p><div class="num"><span class="counter accent" data-to="40">0</span>%</div><p class="dim" style="color:var(--good)">↑ 待填</p></div>
+      <div class="card kpi" style="box-shadow:5px 5px 0 #000"><p class="eyebrow">评审通过率</p><div class="num"><span class="counter accent" data-to="88">0</span>%</div><p class="dim" style="color:var(--good)">↑ 待填</p></div>
+      <div class="card kpi" style="box-shadow:5px 5px 0 #000"><p class="eyebrow">线上缺陷率</p><div class="num"><span class="counter accent" data-to="12">0</span>%</div><p class="dim" style="color:var(--good)">↓ 待填</p></div>
+      <div class="card kpi" style="box-shadow:5px 5px 0 #000"><p class="eyebrow">返工率</p><div class="num"><span class="counter accent" data-to="25">0</span>%</div><p class="dim" style="color:var(--good)">↓ 待填</p></div>
+    </div>
+    <p class="dim2 mt-l" style="font-size:13px">［数字为占位，请替换为团队真实度量，并标注口径与样本］</p>
+    <div class="deck-footer"><span class="dim2">metrics</span><span class="slide-number" data-current="16" data-total="19"></span></div>
+  </section>
+
+  <!-- ===================== 17 · 避坑指南 ===================== -->
+  <!-- 内容待填：见 content.md 第 17 节 -->
+  <section class="slide" data-title="避坑">
+    <p class="kicker">Pitfalls · 反模式</p>
+    <h2 class="h2">五个常见坑，别踩</h2>
+    <div class="grid g3 mt-l anim-stagger-list" data-anim-target>
+      <div class="card" style="box-shadow:4px 4px 0 #000"><h4>盲信生成</h4><p class="dim">能跑 ≠ 正确。不读就提交，迟早出事。</p></div>
+      <div class="card" style="box-shadow:4px 4px 0 #000"><h4>上下文缺失</h4><p class="dim">不给约束就开干，结果风格全乱。</p></div>
+      <div class="card" style="box-shadow:4px 4px 0 #000"><h4>一次写整个模块</h4><p class="dim">大任务不分步，不可验、不可回滚。</p></div>
+      <div class="card" style="box-shadow:4px 4px 0 #000"><h4>跳过测试就合并</h4><p class="dim">AI 写的代码也需要门禁兜底。</p></div>
+      <div class="card" style="box-shadow:4px 4px 0 #000"><h4>把密钥贴进 Prompt</h4><p class="dim">敏感信息一旦出境，无法回收。</p></div>
+      <div class="card" style="box-shadow:4px 4px 0 #000"><h4>不沉淀经验</h4><p class="dim">踩过的坑不写回上下文，下次重来。</p></div>
+    </div>
+    <div class="deck-footer"><span class="dim2">anti-patterns</span><span class="slide-number" data-current="17" data-total="19"></span></div>
+  </section>
+
+  <!-- ===================== 18 · 落地路线图 ===================== -->
+  <!-- 内容待填：见 content.md 第 18 节 -->
+  <section class="slide" data-title="路线图">
+    <p class="kicker">Roadmap · 团队落地</p>
+    <h2 class="h2">四个阶段，把 AI 编程变成团队习惯</h2>
+    <div class="rm">
+      <div class="col now">
+        <span class="tag">Now · 试点</span>
+        <h4>自愿者先行</h4>
+        <ul><li>选 2-3 个非核心模块</li><li>定工具与基线</li><li>记录耗时与问题</li></ul>
+      </div>
+      <div class="col">
+        <span class="tag">Next · 规范</span>
+        <h4>建立公约</h4>
+        <ul><li>CLAUDE.md 模板</li><li>评审与安全清单</li><li>密钥与数据红线</li></ul>
+      </div>
+      <div class="col">
+        <span class="tag">Later · 工具链</span>
+        <h4>嵌入流程</h4>
+        <ul><li>CI 门禁 + 测试</li><li>提示词片段库</li><li>Agent 任务模板</li></ul>
+      </div>
+      <div class="col">
+        <span class="tag">Vision</span>
+        <h4>度量文化</h4>
+        <ul><li>持续追踪指标</li><li>复盘与分享</li><li>反哺上下文</li></ul>
+      </div>
+    </div>
+    <div class="deck-footer"><span class="dim2">roadmap</span><span class="slide-number" data-current="18" data-total="19"></span></div>
+  </section>
+
+  <!-- ===================== 19 · THANKS ===================== -->
+  <!-- 内容待填：见 content.md 第 19 节 -->
+  <section class="slide center tc" data-title="Thanks">
+    <div>
+      <h1 class="h1" style="font-size:180px;line-height:1">Q <span class="accent">&amp;</span> A</h1>
+      <p class="lede" style="margin:18px auto 0">谢谢聆听 · 欢迎交流</p>
+      <p class="mt-m" style="font-size:26px;font-weight:800;letter-spacing:.06em;text-transform:uppercase">欧阳志强</p>
+    </div>
+    <div class="deck-footer"><span class="dim2">end</span><span class="slide-number" data-current="19" data-total="19"></span></div>
+  </section>
+
+</div>
+<script src="../.claude/skills/html-ppt/assets/runtime.js"></script>
+</body>
+</html>

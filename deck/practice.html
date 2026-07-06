@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="sharp-mono">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>实战复盘 · feature 798 (nubia-switch)</title>
+<link rel="stylesheet" href="../.claude/skills/html-ppt/assets/fonts.css">
+<link rel="stylesheet" href="../.claude/skills/html-ppt/assets/base.css">
+<link rel="stylesheet" id="theme-link" href="../.claude/skills/html-ppt/assets/themes/sharp-mono.css">
+<link rel="stylesheet" href="../.claude/skills/html-ppt/assets/animations/animations.css">
+<style>
+  /* ===== sharp-mono deck tuning (与 index.html / pm-coach.html 一致) ===== */
+  .kicker{color:var(--accent-3)}
+  .accent{color:var(--accent-3);font-weight:800}
+  .pill{background:#000;color:#fff;border:2px solid #000;border-radius:0}
+  .pill-accent{background:var(--accent-3);color:#fff;border:2px solid var(--accent-3)}
+  .bigquote{font-family:var(--font-display);font-weight:800;line-height:1.2;
+    letter-spacing:var(--letter-tight);text-transform:uppercase}
+  /* table */
+  .t{width:100%;border-collapse:collapse;font-size:15px}
+  .t th,.t td{padding:13px 14px;text-align:left;border-bottom:2px solid #000;vertical-align:top}
+  .t thead th{background:#000;color:#fff;font-size:11px;text-transform:uppercase;letter-spacing:.1em}
+  .t tbody tr:hover td{background:#000;color:#fff}
+  .t code{font-family:var(--font-mono);font-size:13px}
+  .t td b{font-weight:800}
+  /* pros / cons (范围 vs 非目标) */
+  .pc{display:grid;grid-template-columns:1fr 1fr;gap:26px;margin-top:28px}
+  .pc .card{border:2px solid #000;box-shadow:5px 5px 0 #000}
+  .pc .card h3{display:flex;align-items:center;gap:12px;font-size:22px;
+    text-transform:uppercase;letter-spacing:.02em;margin:0 0 6px}
+  .pc .card h3 .b{display:inline-flex;width:38px;height:38px;border:2px solid #000;
+    align-items:center;justify-content:center;font-size:18px;font-weight:800}
+  .pc .pro{border-top:8px solid var(--good)}
+  .pc .con{border-top:8px solid var(--bad)}
+  .pc .pro h3 .b{background:var(--good);color:#fff}
+  .pc .con h3 .b{background:var(--bad);color:#fff}
+  .pc ul{padding-left:22px;line-height:1.85;color:var(--text-2);margin:8px 0 0}
+  .pc li{font-size:14.5px}
+  /* task card grid */
+  .tasks{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:24px}
+  .task{border:2px solid #000;background:var(--surface);box-shadow:4px 4px 0 #000;padding:16px 18px}
+  .task .tn{font-family:var(--font-mono);color:var(--accent-3);font-weight:800;font-size:15px}
+  .task h4{font-size:15px;margin:6px 0 6px;line-height:1.35}
+  .task .loc{font-family:var(--font-mono);font-size:12px;color:var(--text-3)}
+</style>
+</head>
+<body data-themes="sharp-mono,neo-brutalism,swiss-grid,engineering-whiteprint,minimal-white"
+      data-theme-base="../.claude/skills/html-ppt/assets/themes/">
+<div class="deck">
+
+  <!-- ===== 1 · COVER ===== -->
+  <section class="slide" data-title="Cover">
+    <div class="deck-header"><span class="eyebrow">实战复盘 · pm-coach 案例</span><span class="eyebrow">feature 798</span></div>
+    <p class="kicker anim-fade-down" data-anim="fade-down">nubia-switch · 2026</p>
+    <h1 class="h1 anim-rise-in" data-anim="rise-in">搁置七年的换机功能，<br>怎么被 <span class="accent">AI 工作流</span>接住</h1>
+    <p class="lede">feature 798 (nubia-switch) 的 pm-coach 实战复盘。</p>
+    <div class="row wrap mt-l" style="gap:10px">
+      <span class="pill pill-accent">SPEC</span>
+      <span class="pill">PLAN · 6 tasks</span>
+      <span class="pill">milestone V1.8.0</span>
+    </div>
+    <div class="deck-footer"><span class="dim2">实战复盘</span><span class="slide-number" data-current="1" data-total="9"></span></div>
+  </section>
+
+  <!-- ===== 2 · 背景 (section 1 · big-quote) ===== -->
+  <section class="slide center tc" data-title="背景">
+    <div style="max-width:1040px">
+      <div class="bigquote" style="font-size:130px;line-height:.8;color:var(--accent-3)">&ldquo;</div>
+      <blockquote class="bigquote anim-fade-up" data-anim="fade-up" style="font-size:64px;margin:-12px 0 22px">
+        2019 搁置，<span class="accent">2026 重启</span>。
+      </blockquote>
+      <p class="dim" style="font-size:17px">客户反馈 WiFi 能提取后，雷电采集端 6 月先适配完，前端集成落到我们头上。</p>
+      <p class="dim2 mt-s mono" style="font-size:13px">跨项目 extractor/ThunderCollection#1385（已关闭）</p>
+    </div>
+    <div class="deck-footer"><span class="dim2">background</span><span class="slide-number" data-current="2" data-total="9"></span></div>
+  </section>
+
+  <!-- ===== 3 · SPEC (section 2 · two-column) ===== -->
+  <section class="slide" data-title="SPEC">
+    <p class="kicker">SPEC · 先摸清上游</p>
+    <h2 class="h2">explore 不写代码，先把雷电采集端的活归档</h2>
+    <div class="grid g2 mt-l" style="align-items:start">
+      <div class="card" style="box-shadow:5px 5px 0 #000">
+        <h3>归档了什么</h3>
+        <p class="dim mt-s">5 个 webcollection commit、跨项目依赖、限制逻辑——全部进 SPEC。</p>
+        <p class="dim2 mt-s mono" style="font-size:12.5px">bff3eb14 · e10345a5 · 1bfedf64 · …</p>
+      </div>
+      <div class="card" style="box-shadow:5px 5px 0 #000">
+        <h3>产出结构</h3>
+        <p class="dim mt-s">Explore Summary：背景 / 目标 / 范围 / 非目标 / 需求 / 待决问题。</p>
+        <p class="dim2 mt-s mono" style="font-size:12.5px">specs/798-nubia-switch.md</p>
+      </div>
+    </div>
+    <div class="deck-footer"><span class="dim2">spec · explore</span><span class="slide-number" data-current="3" data-total="9"></span></div>
+  </section>
+
+  <!-- ===== 4 · 关键判断 (section 3 · pros-cons: 范围 vs 非目标) ===== -->
+  <section class="slide" data-title="关键判断">
+    <p class="kicker">Key Call · 同构归并</p>
+    <h2 class="h2">nubia 限制逻辑 = meizu，直接套用</h2>
+    <div class="pc">
+      <div class="card pro anim-fade-up" data-anim="fade-up"><h3><span class="b">✓</span> 范围</h3>
+        <ul>
+          <li>仅适配流程，不动解析</li>
+          <li>nubia + meizu 一并适配</li>
+          <li>限制逻辑完全一致（并列处理）</li>
+        </ul>
+      </div>
+      <div class="card con anim-fade-up" data-anim="fade-up"><h3><span class="b">✗</span> 非目标</h3>
+        <ul>
+          <li>火眼解析 #4507</li>
+          <li>应用分身、低版本机型</li>
+          <li>路由器 / 备用机方案</li>
+        </ul>
+      </div>
+    </div>
+    <div class="deck-footer"><span class="dim2">scope vs non-goals</span><span class="slide-number" data-current="4" data-total="9"></span></div>
+  </section>
+
+  <!-- ===== 5 · PLAN (section 4 · task grid) ===== -->
+  <section class="slide" data-title="PLAN">
+    <p class="kicker">PLAN · 拆成 6 个有归属的任务</p>
+    <h2 class="h2">每任务绑验收标准，按本地组件结构落位</h2>
+    <div class="tasks anim-stagger-list" data-anim-target>
+      <div class="task"><span class="tn">①</span><h4>注册 nubia+meizu 功能元数据</h4><span class="loc">config.ts</span></div>
+      <div class="task"><span class="tn">②</span><h4>WIFI_TASK 加入品牌解析</h4><span class="loc">useDeviceExtractorFnNames.ts:154</span></div>
+      <div class="task"><span class="tn">④</span><h4>强制 local 方案 + 拦截 router/standby</h4><span class="loc">路由拦截</span></div>
+    </div>
+    <p class="dim2 mt-l" style="font-size:13px">共 6 个 task（iid 818~823），各绑验收标准 + 指向具体源码行。</p>
+    <div class="deck-footer"><span class="dim2">plan · tasks</span><span class="slide-number" data-current="5" data-total="9"></span></div>
+  </section>
+
+  <!-- ===== 6 · 实现 (section 5 · bullets) ===== -->
+  <section class="slide" data-title="实现">
+    <p class="kicker">Claim · label 驱动流水线</p>
+    <h2 class="h2">AI 只动 label，不动业务判断</h2>
+    <ul class="anim-stagger-list" style="list-style:none;padding:0;margin:22px 0 0;gap:12px;display:grid" data-anim-target>
+      <li class="card" style="box-shadow:4px 4px 0 #000;padding:14px 22px"><h4>AI:In Progress</h4><p class="dim">开 agent 分支，写实现 + 测试。</p></li>
+      <li class="card" style="box-shadow:4px 4px 0 #000;padding:14px 22px"><h4>AI:Done</h4><p class="dim">跑完切完成，等评审。</p></li>
+      <li class="card" style="box-shadow:4px 4px 0 #000;padding:14px 22px"><h4>AI:Human Review</h4><p class="dim">需人介入时留待，不硬合并。</p></li>
+    </ul>
+    <p class="dim2 mt-m" style="font-size:13px">6 个 task 各有 iid + GitLab web_url，全程可追溯。</p>
+    <div class="deck-footer"><span class="dim2">claim · labels</span><span class="slide-number" data-current="6" data-total="9"></span></div>
+  </section>
+
+  <!-- ===== 7 · 产物 (section 6 · table) ===== -->
+  <section class="slide" data-title="产物">
+    <p class="kicker">Artifacts · 本地优先</p>
+    <h2 class="h2">spec/plan 留本地，push 成 issue + milestone 联动</h2>
+    <div class="card mt-l" style="padding:6px 14px;box-shadow:5px 5px 0 #000">
+      <table class="t">
+        <thead><tr><th>产物</th><th>内容</th></tr></thead>
+        <tbody>
+          <tr><td><b>plan frontmatter</b></td><td>feature_issue:798 · spec_issue:817 · V1.8.0 · status:pushed</td></tr>
+          <tr><td><b>task issues</b></td><td><code>work_items/818</code> … <code>work_items/823</code></td></tr>
+          <tr><td><b>链路</b></td><td>feature ↔ spec ↔ 6 tasks，url 串联</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="deck-footer"><span class="dim2">artifacts</span><span class="slide-number" data-current="7" data-total="9"></span></div>
+  </section>
+
+  <!-- ===== 8 · 踩坑 (section 7 · two-column) ===== -->
+  <section class="slide" data-title="踩坑">
+    <p class="kicker">Pitfalls · 三个真坑</p>
+    <h2 class="h2">claim 跳过自动校验，靠人工验证 + 盯三件事</h2>
+    <div class="grid g2 mt-l" style="align-items:start;gap:22px">
+      <div class="card" style="box-shadow:5px 5px 0 #000">
+        <span class="pill">CLAIM WILL SKIP</span>
+        <p class="dim mt-s" style="line-height:1.9">无 test runner / typecheck；CLAUDE.md 禁 AI 跑 eslint → 需人工验证。</p>
+      </div>
+      <div class="card" style="box-shadow:5px 5px 0 #000">
+        <span class="pill pill-accent">三个真坑</span>
+        <ul class="mt-s" style="line-height:1.85;color:var(--text-2);padding-left:20px;margin:8px 0 0">
+          <li>图标 / logo 资源缺</li>
+          <li><code>brand</code> 大小写敏感（须小写）</li>
+          <li>后端是否已下发功能键</li>
+        </ul>
+      </div>
+    </div>
+    <div class="deck-footer"><span class="dim2">pitfalls</span><span class="slide-number" data-current="8" data-total="9"></span></div>
+  </section>
+
+  <!-- ===== 9 · THANKS ===== -->
+  <section class="slide center tc" data-title="Thanks">
+    <div>
+      <h1 class="h1" style="font-size:160px;line-height:1">Q <span class="accent">&amp;</span> A</h1>
+      <p class="lede" style="margin:16px auto 0">一个真实需求，一套 AI 工作流接住</p>
+      <p class="dim2 mt-m" style="font-size:14px;letter-spacing:.1em;text-transform:uppercase">分享人 · 待填</p>
+    </div>
+    <div class="deck-footer"><span class="dim2">end</span><span class="slide-number" data-current="9" data-total="9"></span></div>
+  </section>
+
+</div>
+<script src="../.claude/skills/html-ppt/assets/runtime.js"></script>
+</body>
+</html>
