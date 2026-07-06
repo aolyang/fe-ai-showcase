@@ -1,29 +1,720 @@
-<!doctype html>
-<html lang="zh-CN">
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="sharp-mono">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>fe-ai-showcase · Decks</title>
+<title>前端 AI 编程实战 · 技术分享</title>
+<link rel="stylesheet" href=".claude/skills/html-ppt/assets/fonts.css">
+<link rel="stylesheet" href=".claude/skills/html-ppt/assets/base.css">
+<link rel="stylesheet" id="theme-link" href=".claude/skills/html-ppt/assets/themes/sharp-mono.css">
+<link rel="stylesheet" href=".claude/skills/html-ppt/assets/animations/animations.css">
 <style>
-  *{box-sizing:border-box}
-  body{font-family:system-ui,-apple-system,'Segoe UI',sans-serif;background:#fff;color:#000;margin:0;padding:64px 48px}
-  h1{font-size:28px;text-transform:uppercase;letter-spacing:.04em;margin:0 0 8px}
-  p.sub{color:#555;margin:0 0 28px}
-  ul{list-style:none;padding:0;margin:0;max-width:640px}
-  li{margin:14px 0}
-  a{color:#000;font-size:18px;font-weight:600;text-decoration:none;border:2px solid #000;
-    padding:12px 18px;display:inline-block;box-shadow:4px 4px 0 #000;transition:background .15s,color .15s}
-  a:hover{background:#000;color:#fff}
-  code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;color:#555;font-size:14px;margin-left:10px}
+  /* ===== sharp-mono deck tuning ===== */
+  /* red kickers + emphasis (theme 默认 accent 是黑色，用 --accent-3 提色) */
+  .kicker{color:var(--accent-3)}
+  .accent{color:var(--accent-3);font-weight:800}
+  /* 全 ppt 字号下限：chrome ≥14px，内容 ≥16px（覆盖 base.css 的 12/13px） */
+  .eyebrow{font-size:14px}
+  .deck-header,.deck-footer{font-size:14px}
+  /* 在纯黑白主题下，pill 默认是黑底深字=不可见，这里反转 */
+  .pill{background:#000;color:#fff;border:2px solid #000;border-radius:0;font-size:14px}
+  .pill-accent{background:var(--accent-3);color:#fff;border:2px solid var(--accent-3)}
+  /* 黑底白字代码块 */
+  .codeblock{background:#000;color:#fff;border:2px solid #000;box-shadow:4px 4px 0 #000;
+    padding:18px 20px;font-size:16px;line-height:1.7;overflow:auto;border-radius:0;margin:0;
+    font-family:var(--font-mono)}
+  .codeblock .c{color:#7a7a7a}      /* comment */
+  .codeblock .k{color:#ff5c5c}       /* key */
+  .codeblock .v{color:#ffd866}       /* value */
+  /* 大引号 */
+  .bigquote{font-family:var(--font-display);font-weight:800;line-height:1.15;
+    letter-spacing:var(--letter-tight);text-transform:uppercase}
+  .bigquote .mark{color:var(--accent-3)}
+
+  /* ===== process steps ===== */
+  .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:22px;margin-top:34px}
+  .step{position:relative;padding:28px 22px 20px;border:2px solid #000;background:var(--surface);
+    box-shadow:4px 4px 0 #000}
+  .step .num{position:absolute;top:-22px;left:18px;width:46px;height:46px;border-radius:50%;
+    background:#000;color:#fff;display:flex;align-items:center;justify-content:center;
+    font-weight:800;font-size:18px;border:2px solid #000;box-shadow:3px 3px 0 var(--accent-3)}
+  .step h4{margin:14px 0 8px;font-size:17px;text-transform:uppercase;letter-spacing:.02em}
+  .step p{font-size:16px;color:var(--text-2);line-height:1.6;margin:0}
+  .step .tag{display:inline-block;margin-top:12px;font-size:14px;padding:3px 10px;
+    background:#000;color:#fff;letter-spacing:.06em}
+
+  /* ===== table ===== */
+  .t{width:100%;border-collapse:collapse;font-size:16px}
+  .t th,.t td{padding:13px 14px;text-align:left;border-bottom:2px solid #000}
+  .t thead th{background:#000;color:#fff;font-size:14px;text-transform:uppercase;letter-spacing:.1em;
+    border-bottom:2px solid #000}
+  .t tbody tr:hover td{background:#000;color:#fff}
+  .t td.num{font-variant-numeric:tabular-nums;text-align:right}
+  .t b{font-weight:800}
+
+  /* ===== roadmap ===== */
+  .rm{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:30px;
+    border:2px solid #000;box-shadow:6px 6px 0 #000}
+  .rm .col{padding:22px 20px;border-right:2px solid #000;background:var(--surface)}
+  .rm .col:last-child{border-right:none}
+  .rm .col .tag{display:inline-block;padding:4px 12px;font-size:14px;background:#000;color:#fff;
+    letter-spacing:.08em;text-transform:uppercase}
+  .rm .col.now{background:var(--accent-3)}
+  .rm .col.now .tag{background:#fff;color:#000}
+  .rm .col.now h4,.rm .col.now li,.rm .col.now span{color:#fff}
+  .rm h4{font-size:16px;margin:12px 0 6px;text-transform:uppercase;letter-spacing:.02em}
+  .rm ul{padding-left:18px;margin:8px 0 0;font-size:16px;color:var(--text-2);line-height:1.6}
+
+  /* ===== pros / cons ===== */
+  .pc{display:grid;grid-template-columns:1fr 1fr;gap:26px;margin-top:30px}
+  .pc .card{border:2px solid #000;box-shadow:4px 4px 0 #000}
+  .pc .card h3{display:flex;align-items:center;gap:12px;font-size:22px;
+    text-transform:uppercase;letter-spacing:.02em;margin:0 0 6px}
+  .pc .card h3 .b{display:inline-flex;width:38px;height:38px;border:2px solid #000;
+    align-items:center;justify-content:center;font-size:18px;font-weight:800}
+  .pc .pro{border-top:8px solid var(--good)}
+  .pc .con{border-top:8px solid var(--bad)}
+  .pc .pro h3 .b{background:var(--good);color:#fff}
+  .pc .con h3 .b{background:var(--bad);color:#fff}
+  .pc ul{padding-left:22px;line-height:1.85;color:var(--text-2);margin:8px 0 0}
+  .pc li{font-size:16px}
+
+  /* ===== kpi ===== */
+  .kpi .eyebrow{font-size:14px}
+  .kpi .num{font-size:60px;font-weight:800;line-height:1;letter-spacing:var(--letter-tight)}
+
+  /* ===== bigger base type + cover flow / presenter ===== */
+  .slide{font-size:18px}
+  h1.title,.h1{font-size:88px}
+  h2.title,.h2{font-size:64px}
+  .lede{font-size:26px}
+  .lede.dim{font-size:22px;max-width:75ch}    /* pm-coach 流程页副标题：26→22px，宽 62→75ch */
+  /* 命令示例条（副标题下方） */
+  .cmdbar{font-family:var(--font-mono);font-size:16px;font-weight:800;
+    display:inline-block;margin:12px 0 0;padding:7px 14px;
+    background:#000;color:#fff;border:2px solid #000;box-shadow:3px 3px 0 var(--accent-3)}
+  .cmdbar .pr{color:var(--accent-3);margin-right:10px}
+  .cmdbar .cm{color:#9a9a9a;font-weight:500;margin-left:12px}
+  .flow{display:flex;align-items:center;gap:16px;font-family:var(--font-mono);font-weight:800;
+    font-size:26px;letter-spacing:.06em;text-transform:uppercase;margin-top:30px}
+  .flow .stage{padding:9px 20px;border:2px solid #000;background:#000;color:#fff;box-shadow:4px 4px 0 #000}
+  .flow .stage.last{background:var(--accent-3)}
+  .flow .arr{font-size:30px;color:var(--accent-3);font-weight:900}
+  .presenter{font-family:var(--font-display);font-size:32px;font-weight:800;
+    text-transform:uppercase;letter-spacing:.04em;margin-top:34px}
+
+  /* ===== two-column agenda (cards | divider | steps) ===== */
+  .twocol{display:flex;gap:40px;margin-top:30px;align-items:stretch}
+  .twocol .col-left{width:300px;flex:none}
+  .twocol .cardlist{display:flex;flex-direction:column;gap:10px}
+  .twocol .cardlist .card{padding:14px 16px}
+  .twocol .cardlist h4{font-family:var(--font-mono);font-size:18px;font-weight:800;
+    text-transform:none;margin:0 0 5px}
+  .twocol .vdiv{width:2px;background:#000;align-self:stretch}
+  .twocol .col-right{flex:1;padding:16px}
+  .wsteps{list-style:none;padding:0;margin:6px 0 0;counter-reset:s}
+  .wsteps > li{counter-increment:s;padding:14px 0;border-bottom:1px solid rgba(0,0,0,.15);
+    font-size:22px;line-height:2.5}
+  .wsteps > li:last-child{border-bottom:none}
+  .wsteps > li::before{content:counter(s,decimal-leading-zero);font-family:var(--font-mono);
+    color:var(--accent-3);font-weight:800;margin-right:12px}
+  .wsub{list-style:none;padding:0;margin:8px 0 0;font-family:var(--font-mono);
+    font-size:18px;line-height:2.3}
+  .wsub li{color:var(--text-2)}
+  .wsub li::before{content:'›  ';color:var(--accent-3);font-weight:800;margin-right:4px}
+  .wsteps code,.wsub code{font-weight:800}
+
+  /* ===== pm-coach flow detail (左右：核心逻辑 | 举例) ===== */
+  .flowpair{display:grid;grid-template-columns:1fr 1fr;gap:26px;margin-top:24px;align-items:start}
+  .flowpair .col-l,.flowpair .col-r{min-width:0}      /* 防 codeblock 撑爆 */
+  .flowpair h3.lab{font-family:var(--font-mono);font-size:20px;font-weight:800;
+    text-transform:uppercase;letter-spacing:.1em;margin:0 0 10px;color:#000;
+    display:inline-block;padding:4px 10px;background:var(--accent-3);color:#fff}
+  .flowpair .card{box-shadow:5px 5px 0 #000;padding:18px 20px}
+  /* 编号步骤 */
+  .fsteps{list-style:none;padding:0;margin:0}
+  .fsteps>li{position:relative;padding:6px 0 6px 34px;font-size:16px;line-height:1.55;
+    border-bottom:1px solid rgba(0,0,0,.12)}
+  .fsteps>li:last-child{border-bottom:none}
+  .fsteps>li::before{counter-increment:fs;content:counter(fs,decimal-leading-zero);
+    position:absolute;left:0;top:6px;font-family:var(--font-mono);font-weight:800;
+    font-size:14px;color:var(--accent-3)}
+  .fsteps{counter-reset:fs}
+  .fsteps code,.fsteps b{font-weight:800}
+  .fsteps .dim{color:var(--text-2);font-size:16px}
+  /* status 流转条 */
+  .statusline{display:flex;align-items:center;gap:8px;flex-wrap:wrap;
+    font-family:var(--font-mono);font-weight:800;font-size:16px;margin-top:8px}
+  .statusline .st{padding:5px 11px;border:2px solid #000;background:#fff;color:#000}
+  .statusline .st.acc{background:var(--accent-3);color:#fff}
+  .statusline .st.dark{background:#000;color:#fff}
+  .statusline .arr{color:var(--accent-3);font-weight:900}
+  /* AI 标签生命周期 */
+  .aiflow{display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+    font-family:var(--font-mono);font-weight:800;font-size:16px;margin:6px 0 4px}
+  .aiflow .t{padding:5px 12px;border:2px solid #000}
+  .aiflow .ip{background:#1F78D1;color:#fff}
+  .aiflow .done{background:#2EB674;color:#fff}
+  .aiflow .hr{background:#FF8D00;color:#fff}
+  .aiflow .arr{color:var(--accent-3);font-weight:900}
+  /* 小表格：task 状态 */
+  .tt{width:100%;border-collapse:collapse;font-family:var(--font-mono);font-size:16px;margin-top:8px}
+  .tt th,.tt td{padding:6px 8px;text-align:left;border-bottom:1px solid rgba(255,255,255,.15)}
+  .tt th{font-size:14px;text-transform:uppercase;letter-spacing:.08em;color:#bbb}
+  .tt td.iid{color:var(--accent-3);font-weight:800}
 </style>
 </head>
-<body>
-  <h1>fe-ai-showcase</h1>
-  <p class="sub">sharp-mono 技术分享 · 三份 deck</p>
-  <ul>
-    <li><a href="/deck/index.html">前端 AI 编程实战</a><code>框架稿 · 19 页</code></li>
-    <li><a href="/deck/pm-coach.html">pm-coach 工作流</a><code>9 页</code></li>
-    <li><a href="/deck/practice.html">实战复盘 · feature 798</a><code>9 页</code></li>
-  </ul>
+<body data-themes="sharp-mono,neo-brutalism,swiss-grid,engineering-whiteprint,minimal-white"
+      data-theme-base=".claude/skills/html-ppt/assets/themes/">
+<div class="deck">
+
+  <!-- ===================== 1 · COVER ===================== -->
+  <!-- 内容待填：见 content.md 第 1 节 -->
+  <section class="slide" data-title="Cover">
+    <div class="deck-header"><span class="eyebrow">前端工程 · 技术分享</span><span class="eyebrow">2026</span></div>
+    <p class="kicker anim-fade-down" data-anim="fade-down">Tech Sharing · 2026</p>
+    <h1 class="h1 anim-rise-in" data-anim="rise-in">前端 <span class="accent">AI</span> 编程实战</h1>
+    <div class="flow anim-fade-up" data-anim="fade-up">
+      <span class="stage">ISSUE</span><span class="arr">→</span><span class="stage">AGENTS</span><span class="arr">→</span><span class="stage">CODE</span><span class="arr">→</span><span class="stage last">按时下班</span>
+    </div>
+    <p class="presenter">分享人 - 欧阳志强</p>
+    <div class="deck-footer"><span class="dim2">分享人 - 欧阳志强</span><span class="slide-number" data-current="1" data-total="15"></span></div>
+  </section>
+
+  <!-- ===================== 2 · AGENDA ===================== -->
+  <!-- 内容待填：见 content.md 第 2 节 -->
+  <section class="slide" data-title="Agenda">
+    <p class="kicker">Agenda</p>
+    <h2 class="h2">大纲 · 指令和工作流</h2>
+    <div class="twocol">
+      <div class="col-left">
+        <p class="eyebrow mb-s">Commands · 命令</p>
+        <div class="cardlist anim-stagger-list" data-anim-target>
+          <div class="card"><h4>/pm-init</h4><p class="dim">校验 glab cli，保存 GitLab 项目配置。</p></div>
+          <div class="card"><h4>/pm-spec</h4><p class="dim">issue-explore 拉取相关 issue 和提交。</p></div>
+          <div class="card"><h4>/pm-plan</h4><p class="dim">make 细化任务，claim 执行任务。</p></div>
+          <div class="card"><h4>/figma-design-explore</h4><p class="dim">分析 figma design resources，组织代码。</p></div>
+        </div>
+      </div>
+      <div class="vdiv"></div>
+      <div class="col-right">
+        <p class="eyebrow" style="margin:0">Lifecycle · 一个需求的完整流程</p>
+        <ol class="wsteps">
+          <li><b>初始化</b> — <code>/pm-init</code> 上下文建立</li>
+          <li><b>SPEC</b>
+            <ul class="wsub">
+              <li><code>/pm-spec explore</code> ⇒ 本地 SPEC</li>
+              <li><code>/pm-spec push</code> ⇒ SPEC issue</li>
+              <li><code>/pm-spec done</code> ⇒ gate ✓</li>
+            </ul>
+          </li>
+          <li><b>PLAN</b>
+            <ul class="wsub">
+              <li><code>/pm-plan make</code> ⇒ 本地 plan</li>
+              <li><code>figma-design-explore</code> ⇒ 分析设计稿</li>
+              <li><code>/pm-plan push</code> ⇒ task issues</li>
+              <li><code>/pm-plan done</code> ⇒ gate ✓</li>
+            </ul>
+          </li>
+          <li><b>CLAIM</b> — <code>/pm-plan claim</code> ⇒ 分支 + draft MR</li>
+        </ol>
+      </div>
+    </div>
+    <div class="deck-footer"><span class="dim2">agenda</span><span class="slide-number" data-current="2" data-total="15"></span></div>
+  </section>
+
+  <!-- ===================== 13 · /pm-init ===================== -->
+  <section class="slide" data-title="pm-init">
+    <p class="kicker">Phase · 初始化</p>
+    <h2 class="h2"><code>/pm-init</code> · 一次建立上下文</h2>
+    <p class="lede dim" style="margin:-4px 0 0">在代码仓库里跑一次，把 pm-coach 的项目配置写进 <code>CLAUDE.md</code>，之后每条指令自动读取。</p>
+    <p class="cmdbar"><span class="pr">›</span> /pm-coach:pm-init</p>
+    <div class="flowpair">
+      <div class="col-l">
+        <h3 class="lab">核心逻辑 · 八步</h3>
+        <div class="card">
+        <ol class="fsteps">
+          <li>选语言 <span class="dim">（zh / en，决定 SPEC、plan 的输出语种）</span></li>
+          <li>校验 <code>glab auth</code>，读仓库 <code>CLAUDE.md</code> 团队约定</li>
+          <li>冲突检查 <span class="dim">（已有规则与 pm-coach 模型冲突 → 中断并确认）</span></li>
+          <li>确认 <code>code_project</code> 与 <code>spec_project</code> <span class="dim">（可不同）</span></li>
+          <li>分配成员角色 <span class="dim">（PM / PO / RD 必填）</span></li>
+          <li>确保 Harness 标签集存在 <span class="dim">（SPEC、待自测、AI:*）</span></li>
+          <li>写 <code>## pm-coach config</code> 到 <code>CLAUDE.md</code></li>
+          <li>输出本地化摘要 → 提示 <code>/pm-spec explore</code></li>
+        </ol>
+        </div>
+      </div>
+      <div class="col-r">
+        <h3 class="lab">举例 · 写入 CLAUDE.md</h3>
+<pre class="codeblock"><span class="c">## pm-coach config</span>
+- <span class="k">language</span>: <span class="v">zh</span>
+- <span class="k">code_project</span>: <span class="v">klmobile/web</span>      <span class="c"># 只放源码/MR</span>
+- <span class="k">spec_project</span>: <span class="v">klmobile/issue</span>    <span class="c"># 放 SPEC/feature/task</span>
+- <span class="k">spec_dir</span>: <span class="v">specs</span>
+- <span class="k">plan_dir</span>: <span class="v">plans</span>
+- <span class="k">labels</span>: <span class="v">SPEC; AI:In Progress, AI:Done,
+         AI:Human Review; 待自测, 待验收…</span>
+- <span class="k">roles</span>:
+  - <span class="v">@Ouyang — RD, FE</span>
+  - <span class="v">@wangkm — PM</span>
+  - <span class="v">@manguanghui — BE</span></pre>
+        <p class="dim2" style="font-size:14px;margin-top:8px">幂等 · 改标签/角色/项目随时重跑</p>
+      </div>
+    </div>
+    <div class="deck-footer"><span class="dim2">init · setup</span><span class="slide-number" data-current="3" data-total="15"></span></div>
+  </section>
+
+  <!-- ===================== 14 · /pm-spec explore ===================== -->
+  <section class="slide" data-title="pm-spec explore">
+    <p class="kicker">Phase · SPEC — 1/3</p>
+    <h2 class="h2"><code>/pm-spec explore</code> · 摸清全貌</h2>
+    <p class="lede dim" style="margin:-4px 0 0">委派 agent 把需求的笔记、关联 issue、相关提交全拉回来，写成一份本地 SPEC。<strong>不写 GitLab。</strong></p>
+    <p class="cmdbar"><span class="pr">›</span> /pm-coach:pm-spec explore 798 <span class="cm"># 按 CLAUDE.md 指定的 spec_project 拼接访问</span></p>
+    <div class="flowpair">
+      <div class="col-l">
+        <h3 class="lab">核心逻辑</h3>
+        <div class="card">
+        <ol class="fsteps">
+          <li>解析 feature <span class="dim">（iid 或名称模糊匹配）</span></li>
+          <li>分类 links <span class="dim">（同项目收集 iid，跨项目记 <code>group/proj#iid</code>）</span></li>
+          <li>委派 <code>issue-explore</code> agent：
+            <span class="dim">读笔记 + 递归关联 issue + 每条 commit 的 <b>diff</b>（glab API，无需 clone）+ 跨项目 commit-mention</span></li>
+          <li>无本地 SPEC → <b>CREATE</b>；有 → diff 后 <b>UPDATE</b></li>
+          <li>写 <code>specs/&lt;iid&gt;-&lt;slug&gt;.md</code> <span class="dim">（frontmatter + Explore Summary + SPEC）</span></li>
+        </ol>
+        <p class="dim2" style="font-size:14px;margin-top:10px">幂等 · 重跑只处理新笔记/新提交</p>
+        </div>
+      </div>
+      <div class="col-r">
+        <h3 class="lab">举例 · specs/798-nubia-switch.md</h3>
+<pre class="codeblock"><span class="c">---</span>
+<span class="k">linked_issues</span>: [<span class="v">798</span>, <span class="v">"extractor/…#1385"</span>]
+<span class="k">spec_issue</span>: <span class="v">817</span>
+<span class="k">status</span>: <span class="v">pushed</span>
+<span class="c">---</span>
+<span class="c">## Explore Summary</span>
+<span class="c">### Commits  (跨项目 webcollection)</span>
+- <span class="v">bff3eb14</span> feat: 努比亚换机适配
+- <span class="v">e10345a5</span> feat: 二维码引导分支重构
+- <span class="v">1bfedf64</span> feat: 文案修改 备份助手
+- <span class="v">d330f026</span> fix: 无线网卡前置检测
+- <span class="v">79597310</span> fix: 强制 local 方案
+<span class="c">### Code changes  (自动读 diff)</span>
+<span class="v">bff3eb14</span>: tool-box-dialog.vue (M) …
+<span class="v">1bfedf64</span>: qrcode-dialog.vue (M) …</pre>
+      </div>
+    </div>
+    <div class="deck-footer"><span class="dim2">spec · explore</span><span class="slide-number" data-current="4" data-total="15"></span></div>
+  </section>
+
+  <!-- ===================== 15 · /pm-spec push ===================== -->
+  <section class="slide" data-title="pm-spec push">
+    <p class="kicker">Phase · SPEC — 2/3</p>
+    <h2 class="h2"><code>/pm-spec push</code> · 发布 SPEC issue</h2>
+    <p class="lede dim" style="margin:-4px 0 0">本地 SPEC 为准，按 frontmatter 驱动：没有就建 SPEC issue，有就更新。<strong>远端被覆盖。</strong></p>
+    <p class="cmdbar"><span class="pr">›</span> /pm-coach:pm-spec push @specs/798-nubia-switch.md</p>
+    <div class="flowpair">
+      <div class="col-l">
+        <h3 class="lab">核心逻辑</h3>
+        <div class="card">
+        <ol class="fsteps">
+          <li>读 frontmatter <span class="dim">（<code>linked_issues[0]</code> = feature，<code>spec_issue</code> 在不在）</span></li>
+          <li>状态前置：<code>explored-need-push</code> 或 <code>pushed</code> 才允许</li>
+          <li><b>无 spec_issue → CREATE</b>：title <code>SPEC: &lt;feature&gt;</code>、desc=Explore Summary、label <code>SPEC</code>、link feature</li>
+          <li><b>有 → UPDATE</b>：desc diff + 按 milestone find-or-create note</li>
+          <li>closed-issue guard <span class="dim">（SPEC issue 关闭 → 走 successor 流）</span></li>
+          <li>回写 <code>spec_issue</code> + <code>status: pushed</code></li>
+        </ol>
+        <p class="dim2" style="font-size:14px;margin-top:10px">desc=Explore Summary；notes=SPEC 正文，一个 milestone 一条</p>
+        </div>
+      </div>
+      <div class="col-r">
+        <h3 class="lab">举例 · SPEC issue #817</h3>
+<pre class="codeblock"><span class="c"># SPEC issue (klmobile/issue #817)</span>
+<span class="k">title</span>: <span class="v">SPEC: 【努比亚换机】支持努比亚换机</span>
+<span class="k">labels</span>: <span class="v">SPEC</span>
+<span class="k">links</span>: <span class="v">relates_to  #798 (feature)</span>
+
+<span class="c">description = ## Explore Summary</span>
+<span class="v">  背景 / 目标 / 范围 / 非目标 /
+  需求 / Commits / Code changes …</span>
+
+<span class="c">notes[0] = ## SPEC create V1.8.0 798</span>
+<span class="v">  ## SPEC
+  ### 背景  ### 范围  ### 非目标
+  ### 验收标准  ### 待决问题</span>
+
+<span class="c"># 重跑 push → 同 milestone note 原地编辑</span>
+<span class="c"># 进入新 milestone → 追加 ## SPEC update …</span></pre>
+      </div>
+    </div>
+    <div class="deck-footer"><span class="dim2">spec · push</span><span class="slide-number" data-current="5" data-total="15"></span></div>
+  </section>
+
+  <!-- ===================== 16 · /pm-spec done ===================== -->
+  <section class="slide" data-title="pm-spec done">
+    <p class="kicker">Phase · SPEC — 3/3</p>
+    <h2 class="h2"><code>/pm-spec done</code> · 确认，第一道 gate</h2>
+    <p class="lede dim" style="margin:-4px 0 0">开发确认 SPEC 没问题，把 SPEC 文件状态更新为 <code>user-confirmed-done</code> —— 这是 <code>claim</code> 的前置之一。</p>
+    <p class="cmdbar"><span class="pr">›</span> /pm-coach:pm-spec done @specs/798-nubia-switch.md</p>
+    <div class="flowpair">
+      <div class="col-l">
+        <h3 class="lab">核心逻辑</h3>
+        <div class="card">
+        <ol class="fsteps">
+          <li>读 frontmatter，<code>status</code> 必须是 <code>pushed</code>
+            <span class="dim">（<code>explored-need-push</code> → 叫你先 push；<code>exploring</code> → 重跑 explore）</span></li>
+          <li>AskUserQuestion 确认 <span class="dim">（SPEC #817 标 done？claim 需要）</span></li>
+          <li>flip <code>status: user-confirmed-done</code>，报告 web_url</li>
+        </ol>
+        <p class="dim2" style="font-size:14px;margin-top:10px">冻结后想改 → 重跑 explore 解锁</p>
+        </div>
+      </div>
+      <div class="col-r">
+        <h3 class="lab">举例 · 文件状态机</h3>
+<pre class="codeblock"><span class="c"># specs/798 的 frontmatter</span>
+<span class="k">spec_issue</span>: <span class="v">817</span>
+<span class="k">status</span>: <span class="v">user-confirmed-done</span>   <span class="c">← done 落点</span>
+</pre>
+        <p class="dim" style="font-size:16px;margin:14px 0 4px">SPEC 文件状态流转：</p>
+        <div class="statusline">
+          <span class="st">exploring</span><span class="arr">→</span>
+          <span class="st">explored-need-push</span><span class="arr">→</span>
+          <span class="st dark">pushed</span><span class="arr">→</span>
+          <span class="st acc">user-confirmed-done ✓</span>
+        </div>
+        <p class="dim2" style="font-size:14px;margin-top:14px">PLAN 也有同样一条链，两链都到 ✓ 才能 <code>claim</code>。</p>
+      </div>
+    </div>
+    <div class="deck-footer"><span class="dim2">spec · done gate</span><span class="slide-number" data-current="6" data-total="15"></span></div>
+  </section>
+
+  <!-- ===================== 17 · /pm-plan make ===================== -->
+  <section class="slide" data-title="pm-plan make">
+    <p class="kicker">Phase · PLAN — 1/4</p>
+    <h2 class="h2"><code>/pm-plan make</code> · SPEC → 本地 plan</h2>
+    <p class="lede dim" style="margin:-4px 0 0">读取 SPEC，问几个真会影响拆分的问题，生成本地plan文件。（怎么做？怎么review？怎么验证）</p>
+    <p class="cmdbar"><span class="pr">›</span> /pm-coach:pm-plan make @specs/798-nubia-switch.md</p>
+    <div class="flowpair">
+      <div class="col-l">
+        <h3 class="lab">核心逻辑</h3>
+        <div class="card">
+        <ol class="fsteps">
+          <li>读取 SPEC <span class="dim">（Background / Scope / 非目标 / AC / Open questions）</span></li>
+          <li>closed guard <span class="dim">（feature 关闭 → 停）</span>，记 <code>plan_milestone</code></li>
+          <li>AskUserQuestion 澄清 Open questions <span class="dim">（只问会改变拆分的）</span></li>
+          <li>若 Scope 偏移 → 改本地 SPEC，提示重跑 <code>push</code></li>
+          <li><b>检测 test_cmd / typecheck_cmd</b> <span class="dim">（读 package.json / pyproject 等，落地为可移植命令）</span></li>
+          <li>写 <code>plans/&lt;iid&gt;-&lt;slug&gt;.md</code> <span class="dim">（tasks 全 pending，无 iid）</span> → 给人确认</li>
+        </ol>
+        </div>
+      </div>
+      <div class="col-r">
+        <h3 class="lab">举例 · plans/798-nubia-switch.md</h3>
+<pre class="codeblock"><span class="c">---</span>
+<span class="k">feature_issue</span>: <span class="v">798</span>
+<span class="k">spec_issue</span>: <span class="v">817</span>
+<span class="k">plan_milestone</span>: <span class="v">"V1.8.0"</span>
+<span class="k">status</span>: <span class="v">explored-need-push</span>
+<span class="k">test_cmd</span>: <span class="v">""</span>      <span class="c"># 无 runner → claim 跳过+报告</span>
+<span class="k">typecheck_cmd</span>: <span class="v">""</span>  <span class="c"># CLAUDE.md 禁 AI 跑 eslint</span>
+<span class="k">tasks</span>:
+  - { title: <span class="v">注册 nubia+meizu 功能元数据</span>, status: <span class="v">pending</span> }
+  - { title: <span class="v">WIFI_TASK 品牌解析</span>, status: <span class="v">pending</span> }
+  - { title: <span class="v">品牌选择器放出</span>, status: <span class="v">pending</span> }
+  - { title: <span class="v">强制 local + 拦截路由器</span>, … }
+  - { title: <span class="v">无线网卡前置检测</span>, … }
+  - { title: <span class="v">二维码文案 + infoDisplay</span>, … }
+<span class="c">---</span></pre>
+      </div>
+    </div>
+    <div class="deck-footer"><span class="dim2">plan · make</span><span class="slide-number" data-current="7" data-total="15"></span></div>
+  </section>
+
+  <!-- ===================== 18 · explore-design-resources ===================== -->
+  <section class="slide" data-title="explore-design-resources">
+    <p class="kicker">Phase · PLAN — 2/4</p>
+    <h2 class="h2"><code>explore-design-resources</code> · Figma</h2>
+    <p class="lede dim" style="margin:-4px 0 0">如果issue中带有Figma链接：把设计稿拆成<b>Layout/Components/Design Tokens</b>，并映射到项目既有资源。<strong>不生成代码。</strong></p>
+    <p class="cmdbar"><span class="pr">›</span> /pm-coach:explore-design-resources <span class="cm">↳ https://www.figma.com/design/aB3xK9nU/feature-798-nubia?node-id=12:845</span></p>
+    <div class="flowpair">
+      <div class="col-l">
+        <h3 class="lab">核心逻辑</h3>
+        <div class="card">
+        <ol class="fsteps">
+          <li>从 issue 描述/笔记里抓 Figma 链</li>
+          <li><code>get_figma_data</code> 拉节点树</li>
+          <li>产出三段：<b>Layout/Components/Design Tokens</b></li>
+          <li>每条映射到 <b>既有</b>组件/token <span class="dim">（复用优先）</span></li>
+          <li>只标 genuinely new 的缺口</li>
+          <li>写 <code>specs/&lt;iid&gt;-&lt;slug&gt;.design.md</code> <span class="dim">（可选深度步）</span></li>
+        </ol>
+        <p class="dim2" style="font-size:14px;margin-top:10px">新组件的代码生成交给项目自有的 figma-to-component 技能，在 claim 时触发</p>
+        </div>
+      </div>
+      <div class="col-r">
+        <h3 class="lab">举例 · design.md 骨架</h3>
+<pre class="codeblock"><span class="c"># specs/798-nubia-switch.design.md</span>
+
+<span class="c">## Layout summary</span>
+<span class="v">WiFi 引导：单列、二维码居中、
+  品牌专属纯文本引导（无图）</span>
+
+<span class="c">## Components</span>
+<span class="k">DeviceQrcode</span>      → <span class="v">既有，加品牌分支</span>
+<span class="k">AddWifiForensicDialog</span> → <span class="v">既有，排除列表移除</span>
+<span class="k">icon-nubia / icon-meizu</span> → <span class="v">⚠ 缺口，需补</span>
+
+<span class="c">## Design tokens</span>
+<span class="k">brand.nubia</span> → <span class="v">复用 meizu 通道</span></pre>
+      </div>
+    </div>
+    <div class="deck-footer"><span class="dim2">plan · design explore</span><span class="slide-number" data-current="8" data-total="15"></span></div>
+  </section>
+
+  <!-- ===================== 19 · /pm-plan push ===================== -->
+  <section class="slide" data-title="pm-plan push">
+    <p class="kicker">Phase · PLAN — 3/4</p>
+    <h2 class="h2"><code>/pm-plan push</code> · 每 task → issue</h2>
+    <p class="lede dim" style="margin:-4px 0 0">把 plan 里每个还没 iid 的 task 建成 issue，<strong>挂到 feature 上（is_blocked_by），不是挂 SPEC</strong>。</p>
+    <p class="cmdbar"><span class="pr">›</span> /pm-coach:pm-plan push @plans/798-nubia-switch.md</p>
+    <div class="flowpair">
+      <div class="col-l">
+        <h3 class="lab">核心逻辑</h3>
+        <div class="card">
+        <ol class="fsteps">
+          <li>读 plan，<code>status</code> 须 <code>explored-need-push</code>/<code>pushed</code></li>
+          <li>closed guard <span class="dim">（feature 关闭 → 停）</span></li>
+          <li>对每个 <b>无 iid</b> 的 task：建 issue <span class="dim">（desc = title + 一句描述 + 对应 AC）</span></li>
+          <li>link <code>feature is_blocked_by task</code></li>
+          <li>回写 <code>iid</code> / <code>web_url</code> / <code>status: pending</code> 到 plan</li>
+          <li>flip plan <code>status: pushed</code> <span class="dim">（已有 iid 的跳过，幂等）</span></li>
+        </ol>
+        <p class="dim2" style="font-size:14px;margin-top:10px">此时不发任何 <code>AI:</code> 标签 —— 那是 claim 的事</p>
+        </div>
+      </div>
+      <div class="col-r">
+        <h3 class="lab">举例 · plans/798 push 后</h3>
+<pre class="codeblock"><span class="c"># 6 个 task 全部建成 issue，挂到 #798</span>
+<span class="k">tasks</span>:
+  - { iid: <span class="v">818</span>, title: <span class="v">注册 nubia+meizu 元数据</span>, status: <span class="v">pending</span> }
+  - { iid: <span class="v">819</span>, title: <span class="v">WIFI_TASK 品牌解析</span>, … }
+  - { iid: <span class="v">820</span>, title: <span class="v">品牌选择器放出</span>, … }
+  - { iid: <span class="v">821</span>, title: <span class="v">强制 local 方案</span>, … }
+  - { iid: <span class="v">822</span>, title: <span class="v">无线网卡前置检测</span>, … }
+  - { iid: <span class="v">823</span>, title: <span class="v">二维码文案+infoDisplay</span>, … }
+<span class="c"># feature #798 阻塞树</span>
+<span class="v">#798  is_blocked_by  #818–823</span></pre>
+      </div>
+    </div>
+    <div class="deck-footer"><span class="dim2">plan · push tasks</span><span class="slide-number" data-current="9" data-total="15"></span></div>
+  </section>
+
+  <!-- ===================== 20 · /pm-plan done ===================== -->
+  <section class="slide" data-title="pm-plan done">
+    <p class="kicker">Phase · PLAN — 4/4</p>
+    <h2 class="h2"><code>/pm-plan done</code> · 确认第二道 gate</h2>
+    <p class="lede dim" style="margin:-4px 0 0">开发确认 plan 没问题，把 plan 文件状态更新为 <code>user-confirmed-done</code> —— SPEC 和 plan 两道 gate 都过，<code>claim</code> 才放行。</p>
+    <p class="cmdbar"><span class="pr">›</span> /pm-coach:pm-plan done @plans/798-nubia-switch.md</p>
+    <div class="flowpair">
+      <div class="col-l">
+        <h3 class="lab">核心逻辑</h3>
+        <div class="card">
+        <ol class="fsteps">
+          <li>读 plan frontmatter，<code>status</code> 必须是 <code>pushed</code>
+            <span class="dim">（<code>explored-need-push</code> → 叫你先 push；<code>exploring</code> → 重跑 make）</span></li>
+          <li>AskUserQuestion 确认 <span class="dim">（plan 标 done？claim 还要 SPEC 也 done）</span></li>
+          <li>把 plan 文件状态更新为 <code>user-confirmed-done</code>，报告 web_url</li>
+          <li>SPEC 还没 done → 提醒先跑 <code>/pm-spec done</code></li>
+        </ol>
+        <p class="dim2" style="font-size:14px;margin-top:10px">冻结后想改 → 重跑 make 解锁</p>
+        <div class="statusline" style="margin-top:14px">
+          <span class="st">explored-need-push</span><span class="arr">→</span>
+          <span class="st dark">pushed</span><span class="arr">→</span>
+          <span class="st acc">user-confirmed-done ✓</span>
+        </div>
+        </div>
+      </div>
+      <div class="col-r">
+        <h3 class="lab">举例 · 双 gate</h3>
+<pre class="codeblock"><span class="c"># plans/798 frontmatter</span>
+<span class="k">status</span>: <span class="v">user-confirmed-done</span>
+
+<span class="c"># claim 启动前的 gate 检查</span>
+<span class="k">SPEC</span>  (specs/798).status   = <span class="v">user-confirmed-done ✓</span>
+<span class="k">PLAN</span>  (plans/798).status   = <span class="v">user-confirmed-done ✓</span>
+<span class="c">──────────────────────────────</span>
+<span class="k">/pm-plan claim @plans/798</span>  <span class="v">→ 放行</span></pre>
+        <div class="aiflow" style="margin-top:16px">
+          <span class="t" style="background:#000;color:#fff">两道 gate</span>
+          <span class="arr">∧</span>
+          <span class="t" style="background:#000;color:#fff">SPEC ∧ Plan</span>
+          <span class="arr">⇒</span>
+          <span class="t done">claim 可跑</span>
+        </div>
+      </div>
+    </div>
+    <div class="deck-footer"><span class="dim2">plan · done gate</span><span class="slide-number" data-current="10" data-total="15"></span></div>
+  </section>
+
+  <!-- ===================== 21 · /pm-plan claim · 机制 ===================== -->
+  <section class="slide" data-title="pm-plan claim 机制">
+    <p class="kicker">Phase · CLAIM — 1/2</p>
+    <h2 class="h2"><code>/pm-plan claim</code> · 每 task 一闭环</h2>
+    <p class="lede dim" style="margin:-4px 0 0">SPEC &amp; PLAN 都确认后：建分支、派 agent 写代码、跑校验，每个检查点都写回 plan。</p>
+    <p class="cmdbar"><span class="pr">›</span> /pm-coach:pm-plan claim @plans/798-nubia-switch.md</p>
+    <div class="flowpair">
+      <div class="col-l">
+        <h3 class="lab">核心逻辑 · task核心循环</h3>
+        <div class="card">
+        <ol class="fsteps">
+          <li>先检查：task 没有 iid → 停下来，叫你先 push</li>
+          <li>清掉旧的 <code>AI:*</code> 标签，标上 <code>AI:In Progress</code>，plan 里也记 <code>in_progress</code></li>
+          <li>建分支 <code>pm/&lt;feature&gt;-&lt;task&gt;-&lt;slug&gt;</code> <span class="dim">（已有分支 → checkout 续跑）</span></li>
+          <li>派一个 <code>general-purpose</code> agent：把 task、验收标准、SPEC 上下文都喂给它，让它实现并补测试</li>
+          <li>跑 <code>test_cmd</code> / <code>typecheck_cmd</code> <span class="dim">（空就跳过并说明，不静默放行）</span></li>
+          <li>每个检查点都写回 plan 的 frontmatter <span class="dim">（开始 / 建分支 / 收尾）</span></li>
+        </ol>
+        <p class="dim2" style="font-size:14px;margin-top:8px">中途中断 → 重跑 claim 会接着既有分支跑，不重做</p>
+        </div>
+      </div>
+      <div class="col-r">
+        <h3 class="lab">举例 · AI 标签生命周期</h3>
+        <div class="aiflow">
+          <span class="t ip">AI:In Progress</span>
+          <span class="arr">→</span>
+          <span class="t done">AI:Done</span>
+          <span class="dim" style="color:#bbb">或</span>
+          <span class="t hr">AI:Human Review</span>
+        </div>
+<pre class="codeblock" style="margin-top:8px"><span class="c"># 798 的 6 个 task 推进（示意）</span>
+<span class="k">iid</span>  <span class="k">title</span>                <span class="k">branch</span>              <span class="k">status</span>
+<span class="v">818</span>  注册功能元数据        <span class="v">pm/798-818-meta</span>     <span class="v">in_progress</span>
+<span class="v">819</span>  WIFI_TASK 品牌解析    <span class="v">pm/798-819-wifi</span>     <span class="v">in_progress</span>
+<span class="v">820</span>  品牌选择器放出        <span class="v">pm/798-820-picker</span>   <span class="v">in_progress</span>
+<span class="v">821</span>  强制 local 方案       <span class="v">pm/798-821-local</span>    <span class="v">in_progress</span>
+<span class="v">822</span>  无线网卡检测          <span class="v">pm/798-822-netsh</span>    <span class="v">in_progress</span>
+<span class="v">823</span>  二维码文案            <span class="v">pm/798-823-qrcode</span>   <span class="v">in_progress</span></pre>
+        <p class="dim2" style="font-size:14px;margin-top:8px">人工标签（待自测/待验收）始终留给人，AI 不碰</p>
+      </div>
+    </div>
+    <div class="deck-footer"><span class="dim2">claim · mechanism</span><span class="slide-number" data-current="11" data-total="15"></span></div>
+  </section>
+
+  <!-- ===================== 22 · /pm-plan claim · 收尾 ===================== -->
+  <section class="slide" data-title="pm-plan claim 收尾">
+    <p class="kicker">Phase · CLAIM — 2/2</p>
+    <h2 class="h2"><code>/pm-plan claim</code> · draft MR 或等待开发介入</h2>
+    <p class="lede dim" style="margin:-4px 0 0">校验过了 → 开 draft MR、标 <code>AI:Done</code>；卡住了 → 标 <code>AI:Human Review</code>、记下 blocker，跳到下一个 task。</p>
+    <p class="cmdbar"><span class="pr">›</span> /pm-coach:pm-plan claim @plans/798-nubia-switch.md</p>
+    <div class="flowpair">
+      <div class="col-l">
+        <h3 class="lab">核心逻辑 · 收尾分支</h3>
+        <div class="card">
+        <ol class="fsteps">
+          <li><b>Done</b>：commit + push 分支，开 <b>draft</b> MR
+            <span class="dim">（同项目写 <code>Closes #iid</code>；跨项目用全 ref）</span></li>
+          <li>已经有开着的 MR → 复用那个 <code>!id</code>，不重复开</li>
+          <li>标 <code>AI:Done</code>，plan 里写 <code>status: done</code> + <code>mr</code></li>
+          <li><b>卡住了</b>：有歧义、缺决策、或修不了 → 标 <code>AI:Human Review</code>，记下 <code>blocker:</code></li>
+          <li>整个 run 跨 task 继续跑 <span class="dim">（一个卡住不停其它）</span></li>
+          <li>想重跑 human_review 的 task：把它的 <code>status</code> 改回 <code>in_progress</code>，再 claim 一次</li>
+        </ol>
+        </div>
+      </div>
+      <div class="col-r">
+        <h3 class="lab">举例 · MR 与 blocker</h3>
+<pre class="codeblock"><span class="c"># Done 的 draft MR 描述</span>
+<span class="k">Source</span>: <span class="v">pm/798-818-meta</span> → <span class="v">main</span>
+<span class="k">Draft</span>: <span class="v">true</span>
+
+<span class="v">Closes klmobile/issue#818</span>
+
+<span class="v">注册 androidnubiamachinegtool /
+androidmeizumachinegtool 四个条目…</span>
+
+<span class="c"># Blocked 的 plan frontmatter</span>
+- iid: <span class="v">820</span>
+  title: <span class="v">品牌选择器放出</span>
+  status: <span class="v">human_review</span>
+  branch: <span class="v">pm/798-820-picker</span>
+  blocker: <span class="v">nubia logo 资源缺失，
+           需设计确认后补 icon-nubia</span></pre>
+      </div>
+    </div>
+    <div class="deck-footer"><span class="dim2">claim · resolve</span><span class="slide-number" data-current="12" data-total="15"></span></div>
+  </section>
+
+  <!-- ===================== 15 · 评审与安全 ===================== -->
+  <!-- 内容待填：见 content.md 第 15 节 -->
+  <section class="slide" data-title="评审与安全">
+    <p class="kicker">Review &amp; Safety</p>
+    <h2 class="h2">哪些交给 AI，哪些必须人审</h2>
+    <div class="pc">
+      <div class="card pro anim-fade-up" data-anim="fade-up"><h3><span class="b">✓</span>适合交给 AI</h3>
+        <ul>
+          <li>样板 / 脚手架代码</li>
+          <li>单元测试与用例</li>
+          <li>纯函数重构、命名优化</li>
+          <li>注释、文档、i18n 文案</li>
+          <li>常规 Bug 的定位与修复建议</li>
+        </ul>
+      </div>
+      <div class="card con anim-fade-up" data-anim="fade-up"><h3><span class="b">✗</span>必须人审</h3>
+        <ul>
+          <li>核心业务逻辑与状态机</li>
+          <li>鉴权、支付、权限边界</li>
+          <li>敏感数据与密钥处理</li>
+          <li>架构与依赖决策</li>
+          <li>性能关键路径与并发</li>
+        </ul>
+      </div>
+    </div>
+    <div class="deck-footer"><span class="dim2">review · safety</span><span class="slide-number" data-current="13" data-total="15"></span></div>
+  </section>
+
+  <!-- ===================== 14 · 我的黄金公式 ===================== -->
+  <section class="slide" data-title="黄金公式">
+    <p class="kicker">Golden Formula · 我的黄金公式</p>
+    <h2 class="h2">我的黄金公式</h2>
+    <div class="steps" style="grid-template-columns:repeat(2,1fr);gap:34px 30px;max-width:1000px;margin-top:46px">
+      <div class="step">
+        <span class="num">1</span>
+        <h4>建立上下文</h4>
+        <p><span class="accent">Explore</span> Issue / Commit / File Path</p>
+      </div>
+      <div class="step">
+        <span class="num">2</span>
+        <h4>多轮询问</h4>
+        <p>一般会用 “<span class="accent">Ask me</span> some questions”，但我用 “<span class="accent">grill</span> me”</p>
+      </div>
+      <div class="step">
+        <span class="num">3</span>
+        <h4>Make Plan</h4>
+        <p>建立 <span class="accent">plan</span> 文件，<span class="accent">todos</span> list 就行，反复确认</p>
+      </div>
+      <div class="step">
+        <span class="num">4</span>
+        <h4>最后一句</h4>
+        <p>作为 <span class="accent">subAgent</span> 在 <span class="accent">background</span> 并行<span class="accent">(parallel)</span>运行</p>
+      </div>
+    </div>
+    <div class="deck-footer"><span class="dim2">golden formula</span><span class="slide-number" data-current="14" data-total="15"></span></div>
+  </section>
+
+  <!-- ===================== 19 · THANKS ===================== -->
+  <!-- 内容待填：见 content.md 第 19 节 -->
+  <section class="slide center tc" data-title="Thanks">
+    <div>
+      <h1 class="h1" style="font-size:180px;line-height:1">Q <span class="accent">&amp;</span> A</h1>
+      <div style="width:160px;height:2px;background:#000;margin:28px auto 0"></div>
+      <p class="mt-m" style="font-size:26px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;margin-top:20px">展示</p>
+    </div>
+    <div class="deck-footer"><span class="dim2">end</span><span class="slide-number" data-current="15" data-total="15"></span></div>
+  </section>
+
+</div>
+<script src=".claude/skills/html-ppt/assets/runtime.js"></script>
 </body>
 </html>
